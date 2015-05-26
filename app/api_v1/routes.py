@@ -1,3 +1,4 @@
+#encoding: utf-8
 from . import api
 
 from .resources.tests import Test

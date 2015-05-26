@@ -1,3 +1,5 @@
+#encoding: utf-8
+
 from flask.ext.restful import Resource, reqparse
 
 class Test(Resource):

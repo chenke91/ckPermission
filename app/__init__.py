@@ -1,3 +1,4 @@
+#encoding: utf-8
 from flask import Flask, render_template
 from flask.ext.bootstrap import Bootstrap
 from flask.ext.moment import Moment
@@ -24,8 +25,10 @@ def create_app(config_name):
 def register_routes(app):
     from .main import main as main_blueprint
     from .api_v1 import api_blueprint
+    from .auth import auth as auth_blueprint
 
     app.register_blueprint(main_blueprint)
     app.register_blueprint(api_blueprint, url_prefix='/api/v1')
+    app.register_blueprint(auth_blueprint, url_prefix='/auth')
 
     return app

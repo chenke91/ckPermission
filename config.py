@@ -1,3 +1,4 @@
+#encoding: utf-8
 import os
 
 basedir = os.path.abspath(os.path.dirname(__file__))
@@ -16,10 +17,10 @@ class Config:
 class DevelopmentConfig(Config):
     DEBUG = True
     #mysql数据库IP地址
-    MYSQL_ADDR = os.getenv('MYSQL_PORT_3306_TCP_ADDR')
-    DB_NAME = 'test'
+    MYSQL_ADDR = os.getenv('MYSQL_PORT_3306_TCP_ADDR') or '127.0.0.1'
+    DB_NAME = 'ck_permission'
     USER_NAME = 'root'
-    PASSWORD = 'ztesoft'
+    PASSWORD = '123456'
 
     SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://{username}:{password}@{mysql_addr}/{db_name}'.\
         format(username=USER_NAME, password=PASSWORD, mysql_addr=MYSQL_ADDR, db_name=DB_NAME)

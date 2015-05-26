@@ -1,3 +1,4 @@
+#encoding: utf-8
 from decimal import Decimal
 import datetime
 import re

@@ -1,3 +1,4 @@
+#encoding: utf-8
 import json
 from flask import Blueprint, make_response
 from flask.ext.restful import Api
