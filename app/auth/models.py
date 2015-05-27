@@ -48,12 +48,18 @@ class Admin(db.Model, PermissionMixin):
         whole_permissions = self.__whole_permissions()
         return bool(whole_permissions & int(module.permission))
 
+    def __repr__(self):
+        return '<Admin: {id}>'.format(id=self.id)
+
 class Role(db.Model, PermissionMixin):
     __tablename__ = 'roles'
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64), unique=True, index=True)
     permissions = db.Column(db.String(64), default=0)
+
+    def __repr__(self):
+        return '<Role: {id}>'.format(id=self.id)
 
 class Module(db.Model):
     __tablename__ = 'modules'
@@ -69,5 +75,8 @@ class Module(db.Model):
     status = db.Column(db.Integer)
     is_default = db.Column(db.Boolean, default=False)
     permission = db.Column(db.String(64), unique=True)
+
+    def __repr__(self):
+        return '<Module: {id}>'.format(id=self.id)
 
 
