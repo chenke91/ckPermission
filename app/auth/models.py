@@ -1,5 +1,5 @@
 #encoding: utf-8
-from .. import db
+from .. import db, cache
 
 admin_role = db.Table(
     'admin_role',
@@ -11,6 +11,7 @@ class PermissionMixin(object):
     #添加权限
     def add_permission(self, module):
         self.permissions = int(self.permissions) | int(module.permission)
+        cache.clear()
         db.session.add(self)
         db.session.commit()
 
@@ -18,9 +19,9 @@ class PermissionMixin(object):
     def rm_permission(self, module):
         self.permissions = int(self.permissions) \
             & (int(self.permissions) ^ int(module.permission))
+        cache.clear()
         db.session.add(self)
         db.session.commit()
-
 
 class Admin(db.Model, PermissionMixin):
     __tablename__ = 'admins'
@@ -42,11 +43,17 @@ class Admin(db.Model, PermissionMixin):
 
     #验证某个路由的权限
     def check_access(self, action):
-        module = Module.query.filter_by(action=action).first()
-        if not module:
-            return False
-        whole_permissions = self.__whole_permissions()
-        return bool(whole_permissions & int(module.permission))
+        key = '{id}_access_{action}'.format(id=self.id, action=action)
+        res = cache.get(key)
+        if res is None:
+            module = Module.query.filter_by(action=action).first()
+            if not module:
+                res = True
+            else:
+                whole_permissions = self.__whole_permissions()
+                res = bool(whole_permissions & int(module.permission))
+            cache.set(key, res, 3600)
+        return res
 
     def __repr__(self):
         return '<Admin: {id}>'.format(id=self.id)

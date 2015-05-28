@@ -24,6 +24,9 @@ class DevelopmentConfig(Config):
 
     SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://{username}:{password}@{mysql_addr}/{db_name}'.\
         format(username=USER_NAME, password=PASSWORD, mysql_addr=MYSQL_ADDR, db_name=DB_NAME)
+    SQLALCHEMY_ECHO = True
+    CACHE_TYPE ='redis'
+    CACHE_REDIS_HOST = '127.0.0.1'
 class TestingConfig(Config):
     TESTING = True
     WTF_CSRF_ENABLED = False
