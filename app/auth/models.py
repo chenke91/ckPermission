@@ -48,12 +48,20 @@ class Admin(db.Model, PermissionMixin):
         if res is None:
             module = Module.query.filter_by(action=action).first()
             if not module:
-                res = True
+                res = False
             else:
                 whole_permissions = self.__whole_permissions()
                 res = bool(whole_permissions & int(module.permission))
             cache.set(key, res, 3600)
         return res
+
+    #查询用户拥有权限的模块列表
+    def module_list(self):
+        whole_permissions = self.__whole_permissions()
+        module_list = Module.query.\
+            filter(Module.permission.op('&')(whole_permissions)).\
+            order_by(Module.order).all()
+        return modules_tree(module_list)
 
     def __repr__(self):
         return '<Admin: {id}>'.format(id=self.id)
@@ -83,7 +91,54 @@ class Module(db.Model):
     is_default = db.Column(db.Boolean, default=False)
     permission = db.Column(db.String(64), unique=True)
 
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'pid': self.pid,
+            'memo': self.memo,
+            'icon': self.icon,
+            'permission': self.permission
+        }
+
     def __repr__(self):
         return '<Module: {id}>'.format(id=self.id)
 
+def modules_tree(modules, pid=0):
+    res = []
+    for module in modules:
+        if module.pid == pid:
+            data = module.to_dict()
+            data['sub_modules'] = modules_tree(modules, pid=module.id)
+            res.append(data)
+    return res
 
+def generate_fake():
+    db.session.rollback()
+    db.drop_all()
+    db.create_all()
+    admin = Admin(
+        email = 'admin@qq.com',
+        name = 'admin'
+    )
+    role = Role(
+        name = 'admin'
+    )
+    admin.roles.append(role)
+    db.session.add(admin)
+    db.session.commit()
+    module1 = Module(
+        name = '用户管理',
+        action = 'main.user',
+        permission = 2
+    )
+    module2 = Module(
+        name = '权限管理',
+        action = 'main.permission',
+        permission = 4
+    )
+    db.session.add(module1)
+    db.session.add(module2)
+    db.session.commit()
+    role.add_permission(module1)
+    role.add_permission(module2)
