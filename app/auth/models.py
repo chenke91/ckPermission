@@ -1,5 +1,7 @@
 #encoding: utf-8
-from .. import db, cache
+from werkzeug.security import generate_password_hash, check_password_hash
+from flask.ext.login import AnonymousUserMixin
+from .. import db, cache, login_manager
 
 admin_role = db.Table(
     'admin_role',
@@ -27,12 +29,38 @@ class Admin(db.Model, PermissionMixin):
     __tablename__ = 'admins'
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(64), unique=True, index=True)
+    password_hash = db.Column(db.String(128))
     name = db.Column(db.String(64), unique=True, index=True)
     permissions = db.Column(db.String(64), default=0)
+    avalible = db.Column(db.Boolean, default=True)
     roles = db.relationship('Role',
                             secondary=admin_role,
                             backref=db.backref('admins', lazy='dynamic'),
                             lazy='dynamic')
+
+    def is_active(self):
+        return True
+
+    def is_authenticated(self):
+        return True
+
+    def is_anonymous(self):
+        return False
+
+    def get_id(self):
+        return self.id
+
+    @property
+    def password(self):
+        return AttributeError('password is not a readable attribute')
+
+    @password.setter
+    def password(self, password):
+        self.password_hash = generate_password_hash(password)
+
+    def verify_password(self, password):
+        return check_password_hash(self.password_hash, password)
+
 
     #获取用户所有权限，包括自身权限与角色权限
     def __whole_permissions(self):
@@ -63,6 +91,31 @@ class Admin(db.Model, PermissionMixin):
             order_by(Module.order).all()
         return modules_tree(module_list)
 
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'email': self.email,
+            'name': self.name,
+            'permissions': self.__whole_permissions(),
+            'avalible': self.avalible,
+            'roles': [role.to_dict() for role in self.roles.all()]
+        }
+
+    @staticmethod
+    def generate_fake(role, count=20):
+        from random import seed, uniform, choice
+        import forgery_py
+        seed()
+        for i in range(count):
+            admin = Admin(
+                name = forgery_py.name.full_name(),
+                password = '123456',
+                email = forgery_py.internet.email_address()
+            )
+            admin.roles.append(role)
+            db.session.add(admin)
+        db.session.commit()
+
     def __repr__(self):
         return '<Admin: {id}>'.format(id=self.id)
 
@@ -72,6 +125,26 @@ class Role(db.Model, PermissionMixin):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64), unique=True, index=True)
     permissions = db.Column(db.String(64), default=0)
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'permissions': self.permissions
+        }
+
+    @staticmethod
+    def generate_fake(count=6):
+        from random import seed, uniform, choice
+        import forgery_py
+        seed()
+        for i in range(count):
+            role = Role(
+                name = forgery_py.name.full_name(),
+                permissions = choice([2,4,8,16,10,12,14,6,26])
+            )
+            db.session.add(role)
+        db.session.commit()
 
     def __repr__(self):
         return '<Role: {id}>'.format(id=self.id)
@@ -86,8 +159,8 @@ class Module(db.Model):
     action = db.Column(db.String(64), unique=True, index=True)
     memo = db.Column(db.String(255))
     icon = db.Column(db.String(128))
-    order = db.Column(db.Integer)
-    status = db.Column(db.Integer)
+    order = db.Column(db.Integer, default=0)
+    status = db.Column(db.Integer, default=1)
     is_default = db.Column(db.Boolean, default=False)
     permission = db.Column(db.String(64), unique=True)
 
@@ -98,11 +171,22 @@ class Module(db.Model):
             'pid': self.pid,
             'memo': self.memo,
             'icon': self.icon,
-            'permission': self.permission
+            'permission': self.permission,
+            'action': '/' + self.action.replace('.', '/') if self.action else ''
         }
 
     def __repr__(self):
         return '<Module: {id}>'.format(id=self.id)
+
+class AnonymousUser(AnonymousUserMixin):
+    def is_admin(self):
+        return False
+
+@login_manager.user_loader
+def load_user(admin_id):
+    return Admin.query.get(int(admin_id))
+
+login_manager.anonymous_user = AnonymousUser
 
 def modules_tree(modules, pid=0):
     res = []
@@ -110,16 +194,20 @@ def modules_tree(modules, pid=0):
         if module.pid == pid:
             data = module.to_dict()
             data['sub_modules'] = modules_tree(modules, pid=module.id)
+            data['has_sub'] = False
+            if len(data['sub_modules']) > 0:
+                data['has_sub'] = True
             res.append(data)
     return res
 
-def generate_fake():
+def init_auth():
     db.session.rollback()
     db.drop_all()
     db.create_all()
     admin = Admin(
         email = 'admin@qq.com',
-        name = 'admin'
+        name = 'admin',
+        password = '123456'
     )
     role = Role(
         name = 'admin'
@@ -127,18 +215,49 @@ def generate_fake():
     admin.roles.append(role)
     db.session.add(admin)
     db.session.commit()
-    module1 = Module(
-        name = '用户管理',
-        action = 'main.user',
-        permission = 2
-    )
-    module2 = Module(
-        name = '权限管理',
-        action = 'main.permission',
-        permission = 4
-    )
-    db.session.add(module1)
-    db.session.add(module2)
+    sys_moduel = Module(
+        name = '系统管理',
+        permission = 2)
+
+    db.session.add(sys_moduel)
     db.session.commit()
-    role.add_permission(module1)
-    role.add_permission(module2)
+    Admin.generate_fake(role)
+    Role.generate_fake()
+    user_module = Module(
+        name = '用户管理',
+        icon = 'glyphicon glyphicon-user',
+        action = 'admin.users',
+        permission = 4,
+        pid = sys_moduel.id)
+
+    role_module = Module(
+        name = '角色管理',
+        icon = 'glyphicon glyphicon-user',
+        action = 'admin.roles',
+        permission = 8,
+        pid = sys_moduel.id)
+
+    permission_module = Module(
+        name = '权限管理',
+        action = 'admin.permissions',
+        permission = 16,
+        icon = 'fa fa-gears',
+        pid = sys_moduel.id)
+
+    menu_module = Module(
+        name = '系统模块管理',
+        action = 'admin.modules',
+        permission = 32,
+        icon = 'glyphicon glyphicon-folder-open',
+        pid = sys_moduel.id)
+
+    db.session.add(user_module)
+    db.session.add(role_module)
+    db.session.add(permission_module)
+    db.session.add(menu_module)
+    db.session.commit()
+    role.add_permission(sys_moduel)
+    role.add_permission(user_module)
+    role.add_permission(role_module)
+    role.add_permission(permission_module)
+    role.add_permission(menu_module)

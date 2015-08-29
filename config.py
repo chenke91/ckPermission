@@ -9,6 +9,8 @@ class Config:
     #日志文件
     LOG_FILENAME = os.path.join(basedir, 'data/app.log')
 
+    APP_DIR = os.path.join(basedir, 'app')
+
     PER_PAGE = 20
     @staticmethod
     def init_app(app):

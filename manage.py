@@ -23,6 +23,11 @@ def test():
     tests = unittest.TestLoader().discover('tests')
     unittest.TextTestRunner(verbosity=2).run(tests)
 
+@manager.command
+def init_app():
+    from app.auth.models import init_auth
+    init_auth()
+
 
 if __name__ == '__main__':
     manager.run()

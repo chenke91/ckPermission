@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    {% block head %}
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <title>{% block title %}I have a blog{% endblock %}</title>
+    <meta name="description" content="AbsoluteAdmin - A Responsive HTML5 Admin UI Framework">
+    <meta name="author" content="AbsoluteAdmin">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Font CSS (Via CDN) -->
+    <link rel='stylesheet' type='text/css' href='{$=url_for('static', filename='vendor/google_fonts.css')}'>
+    <!-- Theme CSS -->
+    <link rel="stylesheet" type="text/css" href="{$=url_for('static', filename='assets/skin/default_skin/css/theme.css')}">
+    <link rel="stylesheet" type="text/css" href="{$=url_for('static', filename='assets/admin-tools/admin-forms/css/admin-forms.css')}">
+    <link rel="stylesheet" type="text/css" href="{$=url_for('static', filename='assets/fonts/glyphicons-pro/glyphicons-pro.css')}">
+    <link rel="stylesheet" type="text/css" href="{$=url_for('static', filename='css/style.css')}">
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="{$=url_for('static', filename='assets/img/favicon.ico')}">
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+  <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+  <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+<![endif]-->
+    {% endblock %}
+</head>
+
+<body class="blank-page" ng-app="myApp">
+    <!-- Start: Main -->
+    <div id="main">
+        <!-- Start: Header -->
+        <div ng-controller="MenuController">
+            <header class="navbar navbar-static-top navbar-shadow">
+                <div class="navbar-branding">
+                    <a class="navbar-brand" href="#">
+                        <b>I have a blog</b>
+                    </a>
+                    <span id="toggle_sidemenu_l" class="ad ad-lines"></span>
+                </div>
+                <ul class="nav navbar-nav navbar-left">
+                    <li class="hidden-xs" ng-repeat="module in menu.modules">
+                        <a href="#">
+                            <span>{{module.name}}</span>
+                        </a>
+                    </li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="dropdown menu-merge">
+                        <a href="#" class="dropdown-toggle fw600 p15" data-toggle="dropdown">
+                            <img src="/static/images/avtar_default.jpg" alt="avatar" class="mw30 br64">
+                            <span class="hidden-xs pl15"> admin </span>
+                            <span class="caret caret-tp hidden-xs"></span>
+                        </a>
+                        <ul class="dropdown-menu list-group dropdown-persist w250" role="menu">
+                            <li class="list-group-item">
+                                <a href="#" class="animated animated-short fadeInUp">
+                                    <span class="fa fa-user"></span> 个人信息
+                                    <span class="label label-warning">6</span>
+                                </a>
+                            </li>
+                            <li class="dropdown-footer">
+                                <a href="{$=url_for('auth.logout')}" class="">
+                                    <span class="fa fa-power-off pr5"></span> 登出 </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </header>
+            <!-- End: Header -->
+            <!-- Start: Sidebar -->
+            <aside id="sidebar_left" class="nano nano-light">
+                <!-- Start: Sidebar Left Content -->
+                <div class="sidebar-left-content nano-content">
+                    <!-- Start: Sidebar Header -->
+                    <header class="sidebar-header">
+                        <!-- Sidebar Widget - Author -->
+                      <div class="sidebar-widget author-widget">
+                        <div class="media">
+                          <a class="media-left" href="">
+                            <img src="/static/images/avtar_default.jpg" class="img-responsive">
+                          </a>
+                          <div class="media-body">
+                            <div class="media-links">
+                               <a href="#" class="sidebar-menu-toggle">用户菜单 -</a> <a href="{$=url_for('auth.logout')}">登出</a>
+                            </div>
+                            <div class="media-author">Admin</div>
+                          </div>
+                        </div>
+                      </div>
+                    </header>
+                    <!-- End: Sidebar Header -->
+                    <!-- Start: Sidebar Menu -->
+                    <ul class="nav sidebar-menu">
+                        <li class="sidebar-label pt20">菜单</li>
+                        <li ng-repeat="module in menu.current_module.sub_modules">
+                            <a href="/#{{module.action}}">
+                                <span class="{{module.icon}}"></span>
+                                <span class="sidebar-title">{{module.name}}</span>
+                                <span class="caret" ng-show="module.has_sub"></span>
+                            </a>
+                            <ul class="nav sub-nav" style="" ng-repeat="submodule in module.sub_module">
+                              <li>
+                                <a href="" class="accordion-toggle">
+                                  <span class="glyphicon glyphicon-edit"></span>submodule.name</a>
+                              </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="" class="accordion-toggle">
+                                <span class="fa fa-sign-out"></span>
+                                <span class="sidebar-title">test</span>
+                                <span class="caret"></span>
+                            </a>
+                            <ul class="nav sub-nav" style="">
+                              <li>
+                                <a href="">
+                                  <span class="glyphicon glyphicon-edit"></span>test</a>
+                              </li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <!-- End: Sidebar Menu -->
+                    <!-- Start: Sidebar Collapse Button -->
+                    <div class="sidebar-toggle-mini">
+                        <a href="#">
+                            <span class="fa fa-sign-out"></span>
+                        </a>
+                    </div>
+                    <!-- End: Sidebar Collapse Button -->
+                </div>
+                <!-- End: Sidebar Left Content -->
+            </aside>
+        </div>
+        <!-- Start: Content-Wrapper -->
+        <section id="content_wrapper">            
+            <!-- Begin: Content -->
+             {% block content %}
+            <section id="content" class="table-layout animated fadeIn">
+                <div class="tray tray-center"> 
+                    {% for message in get_flashed_messages() %}
+                    <div class="alert alert-system alert-dismissable">
+                      <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                      <i class="fa fa-cubes pr10"></i>
+                      {$=message}
+                    </div>
+                    {% endfor %}
+                    <ng-view>
+                    </ng-view>
+                </div>
+            </section>
+            {% endblock %}
+            <!-- End: Content -->
+        </section>
+    </div>
+    {% block scripts %}
+    <!-- End: Main -->
+    <!-- BEGIN: PAGE SCRIPTS -->
+    <!-- jQuery -->
+  <script src="{$=url_for('static', filename='vendor/jquery/jquery-1.11.1.min.js')}"></script>
+
+  <!-- Theme Javascript -->
+  <script src="{$=url_for('static',filename='assets/js/utility/utility.js')}"></script>
+  <script src="{$=url_for('static',filename='assets/js/demo/demo.js')}"></script>
+  <script src="{$=url_for('static', filename='assets/js/main.js')}"></script>
+
+    <script src="/static/js/plugins/angular.min.js"></script>
+    <script src="/static/js/plugins/angular-route.min.js"></script>
+    <script src="/static/js/plugins/angularjs-dropdown-multiselect.js"></script>
+    <script type="text/javascript" src="/static/js/plugins/lodash.min.js"></script>
+    <script type="text/javascript" src="/static/js/plugins/ui-bootstrap-tpls.min.js"></script>
+    <script type="text/javascript" src="/static/js/app.js"></script>
+    <script type="text/javascript" src="/static/js/controller.js"></script>
+    <script type="text/javascript" src="/static/js/services.js"></script>
+    <script type="text/javascript" src="/static/js/router.js"></script>
+    <script type="text/javascript">
+    jQuery(document).ready(function() {
+
+        "use strict";
+
+        // Init Theme Core    
+        Core.init();
+
+        // Init Demo JS     
+        // Demo.init();
+
+
+    });
+    </script>
+    <!-- END: PAGE SCRIPTS -->
+    {% endblock %}
+</body>
+
+</html>
