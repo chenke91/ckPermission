@@ -30,7 +30,7 @@ class Admin(db.Model, PermissionMixin):
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(64), unique=True, index=True)
     password_hash = db.Column(db.String(128))
-    name = db.Column(db.String(64), unique=True, index=True)
+    name = db.Column(db.String(64), index=True)
     permissions = db.Column(db.String(64), default=0)
     avalible = db.Column(db.Boolean, default=True)
     roles = db.relationship('Role',
@@ -88,6 +88,7 @@ class Admin(db.Model, PermissionMixin):
         whole_permissions = self.__whole_permissions()
         module_list = Module.query.\
             filter(Module.permission.op('&')(whole_permissions)).\
+            filter(Module.is_show==True).\
             order_by(Module.order).all()
         return modules_tree(module_list)
 
@@ -229,6 +230,14 @@ def init_auth():
         action = 'admin.users',
         permission = 4,
         pid = sys_moduel.id)
+    new_user_module = Module(
+        name = '新增用户',
+        icon = 'glyphicon glyphicon-user',
+        action = 'admin.new_user',
+        permission = 64,
+        is_show = False,
+        pid = sys_moduel.id)
+
 
     role_module = Module(
         name = '角色管理',
@@ -252,12 +261,14 @@ def init_auth():
         pid = sys_moduel.id)
 
     db.session.add(user_module)
+    db.session.add(new_user_module)
     db.session.add(role_module)
     db.session.add(permission_module)
     db.session.add(menu_module)
     db.session.commit()
     role.add_permission(sys_moduel)
     role.add_permission(user_module)
+    role.add_permission(new_user_module)
     role.add_permission(role_module)
     role.add_permission(permission_module)
     role.add_permission(menu_module)

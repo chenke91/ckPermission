@@ -8,7 +8,8 @@
             <div class="dt-panelmenu clearfix">
                 <div class="dataTables_length" id="datatable2_length">
                     <div class="DTTT btn-group" style="display: block;">
-                        <button class="btn btn-default btn-sm" ng-click="user.get_users()">刷新</button>
+                        <a class="btn btn-default btn-sm" ng-click="user.get_users()">刷新</a>
+                        <a class="btn btn-primary btn-sm" href="#/admin/new_user">新增</a>
                     </div>
                 </div>
                 <div class="dt-abc-filter dataTables_filter">
@@ -37,7 +38,7 @@
                             <div ng-dropdown-multiselect="" options="user.role_list" selected-model="data.roles" extra-settings="user.settings"></div>
                         </td>    
                         <td>
-                            <a href="javascript:;" class="btn btn-default btn-sm" ng-click="user.edit(data)">编辑</a>
+                            <a href="#/admin/edit_user/{{data.id}}" class="btn btn-default btn-sm">编辑</a>
                             <a href="javascript:;" class="btn btn-danger btn-sm" ng-click="user.delete(data)">禁用</a>
                         </td>
                     </tr>

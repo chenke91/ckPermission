@@ -133,7 +133,19 @@
             </aside>
         </div>
         <!-- Start: Content-Wrapper -->
-        <section id="content_wrapper">            
+        <section id="content_wrapper"> 
+            <header id="topbar" class="alt">
+                <div class="topbar-left">
+                  <ol class="breadcrumb">
+                    <li class="crumb-active" ng-repeat="node in trace">
+                      <a href="{{node.url}}">{{node.name}}</a>
+                    </li>
+                  </ol>
+                </div>
+            </header>
+            <div ng-controller="AlertCtrl">
+                <alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>
+            </div>      
             <!-- Begin: Content -->
              {% block content %}
             <section id="content" class="table-layout animated fadeIn">
