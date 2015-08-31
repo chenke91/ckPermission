@@ -35,7 +35,14 @@
                         <td>{{ data.name }}</td>
                         <td>{{ data.permissions }}</td>
                         <td>
-                            <div ng-dropdown-multiselect="" options="user.role_list" selected-model="data.roles" extra-settings="user.settings"></div>
+                            <div class="btn-group" dropdown is-open="status.isopen">
+                              <button id="single-button" type="button" class="btn btn-default" dropdown-toggle ng-disabled="disabled">
+                                {{data.roles[0].name}} <span class="caret"></span>
+                              </button>
+                              <ul class="dropdown-menu" role="menu" aria-labelledby="single-button">
+                                <li role="menuitem" ng-repeat="role in data.roles"><a>{{role.name}}</a></li>
+                              </ul>
+                            </div>
                         </td>    
                         <td>
                             <a href="#/admin/edit_user/{{data.id}}" class="btn btn-default btn-sm">编辑</a>

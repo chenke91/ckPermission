@@ -69,7 +69,8 @@ myApp.controller('UserController', function($rootScope, $scope, myAPIservice) {
         settings: {
             smartButtonMaxItems: 3,
             displayProp: 'name',
-            enableSearch: true
+            showCheckAll: false,
+            showUncheckAll: false,
         },
         init: function() {
             this.get_users();
@@ -146,6 +147,22 @@ myApp.controller('EditUserController', function($scope, $rootScope, myAPIservice
                     $rootScope.addAlert('danger', '请求异常');
                 }
             })
+        },
+        update: function() {
+            var user_data = $scope.user.current_user;
+            if (user_data.password != user_data.repass) {
+                $rootScope.addAlert('danger', '两次密码不一致');
+                return;
+            }
+            var selected_role_ids = _.map(_.filter($scope.user.role_list, function(role) {
+                return role.selected;
+            }), 'id');
+            if (selected_role_ids.length == 0) {
+                $rootScope.addAlert('danger', '请选择角色');
+                return;
+            }
+            user_data.role_ids = selected_role_ids;
+            myAPIservice.updateUser(user_data, $routeParams.id);
         },
         init: function() {
             this.get_current_user($routeParams.id);

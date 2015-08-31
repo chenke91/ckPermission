@@ -30,7 +30,21 @@ myApp.service('myAPIservice', function($http, $rootScope) {
             } else {
                 $rootScope.addAlert('danger', '请求异常');
             }
-            
         })
     };
+    this.updateUser = function(data, id) {
+        $http.post('/admin/users/update/'+id+'/', data).then(function(resp) {
+            if (resp.data.status == 0) {
+                $rootScope.addAlert('success', '更新成功');
+            } else {
+                $rootScope.addAlert('danger', resp.data.msg);
+            }
+        }, function(resp) {
+            if (resp.message) {
+                $rootScope.addAlert('danger', resp.data.message);
+            } else {
+                $rootScope.addAlert('danger', '请求异常');
+            }
+        })
+    }
 })

@@ -10,7 +10,7 @@ myApp.config([ '$routeProvider', function($routeProvider) {
         controller : 'UserController'
     })
     .when('/admin/new_user', {
-        templateUrl : '/static/templates/system/user_edit.html',
+        templateUrl : '/static/templates/system/user_add.html',
         controller : 'NewUserController'
     })
     .when('/admin/edit_user/:id', {

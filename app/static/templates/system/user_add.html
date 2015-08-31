@@ -9,7 +9,7 @@
                     </span>
                 </div>
                 <!-- end .form-header section -->
-                <form name="form" id="form-register2" ng-submit="user.update()">
+                <form name="form" id="form-register2" ng-submit="user.add(form.$valid)">
                     <div class="panel-body p25">
                         <div class="section-divider mt10 mb40">
                             <span>请填写信息</span>
@@ -40,19 +40,21 @@
                         <!-- end section -->
                         <div class="section">
                             <label for="password" class="field prepend-icon">
-                                <input type="password" name="password" id="password" class="gui-input" placeholder="输入密码" ng-model="user.current_user.password" />
+                                <input type="password" name="password" id="password" class="gui-input" placeholder="输入密码" ng-model="user.current_user.password" required />
                                 <label for="password" class="field-icon">
                                     <i class="fa fa-lock"></i>
                                 </label>
+                                <em ng-show="form.password.$dirty && form.password.$error.required" for="password" class="state-error">请输入密码</em>
                             </label>
                         </div>
                         <!-- end section -->
                         <div class="section">
                             <label for="repass" class="field prepend-icon">
-                                <input type="password" name="repass" id="repass" class="gui-input" placeholder="确认密码" ng-model="user.current_user.repass" />
+                                <input type="password" name="repass" id="repass" class="gui-input" placeholder="确认密码" ng-model="user.current_user.repass" required />
                                 <label for="repass" class="field-icon">
                                     <i class="fa fa-unlock-alt"></i>
                                 </label>
+                                <em ng-show="form.repass.$dirty && form.repass.$error.required" for="repass" class="state-error">请确认密码</em>
                             </label>
                         </div>
                         <!-- end section -->

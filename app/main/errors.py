@@ -1,6 +1,7 @@
 #encoding: utf-8
 
 from flask import render_template, request, jsonify
+from app.exceptions import JsonOutputException
 from . import main
 
 @main.app_errorhandler(404)
@@ -32,3 +33,8 @@ def unauth_error(e):
         response.status_code = 401
         return response
     return render_template('commons/401.html'), 401
+
+@main.app_errorhandler(JsonOutputException)
+def json_output(e):
+    res = {'status': 1, 'msg': str(e)}
+    return jsonify(res)

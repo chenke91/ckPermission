@@ -3,6 +3,7 @@
 from flask import jsonify, request, abort
 from flask.ext.login import current_user
 from app import db
+from app.exceptions import JsonOutputException
 from ..auth.models import Admin, Role
 from . import admin
 
@@ -42,8 +43,7 @@ def new_user():
     password = request.json.get('password')
     role_ids = request.json.get('role_ids', [])
     if Admin.query.filter_by(email=email).first():
-        res = {'status': 1, 'msg': '该邮箱已被使用'}
-        return jsonify(res)
+        raise JsonOutputException('该邮箱已被使用')
     admin = Admin(
         name = name,
         email = email,
@@ -55,3 +55,31 @@ def new_user():
     db.session.commit()
     res = {'status': 0}
     return jsonify(res)
+
+@admin.route('/users/update/<int:id>/', methods=['GET', 'POST'])
+def update_user(id):
+    name = request.json.get('name')
+    email = request.json.get('email')
+    password = request.json.get('password')
+    role_ids = request.json.get('role_ids', [])
+    exist = Admin.query.filter_by(email=email).first()
+    if not exist.id == id:
+        raise JsonOutputException('该邮箱已被使用')
+    user = Admin.query.get_or_404(id)
+    user.name = name
+    user.email = email
+    if password:
+        user.password = password
+    old_roles = user.roles.all()
+    new_roles = [Role.query.get(id) for id in role_ids]
+    delete_roles = list(set(old_roles).difference(set(new_roles)))
+    add_roles = list(set(new_roles).difference(set(old_roles)))
+    for role in delete_roles:
+        user.roles.remove(role)
+    for role in add_roles:
+        user.roles.append(role)
+    db.session.add(user)
+    db.session.commit()
+    res = {'status': 0}
+    return jsonify(res)
+
