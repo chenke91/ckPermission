@@ -12,3 +12,15 @@ em.state-error {
     font-size: 0.85em;
     color: #DE888A;
 }
+div.tree ul {
+    display: block;
+    list-style-type: none;
+}
+div.tree li > span {
+    display: block;
+    font-size: 16px;
+    padding: 1px
+}
+div.tree li > span:hover, div.tree li > span:focus, div.tree li > span:active {
+    background-color: #3498db;
+}

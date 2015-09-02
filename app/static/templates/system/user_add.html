@@ -1,96 +1,98 @@
-<div>
-    <div class="tab-content mw900 center-block center-children">
-        <!-- Registration 2 -->
-        <div class="admin-form theme-danger tab-pane mw800 active" id="register2" role="tabpanel">
-            <div class="panel panel-danger heading-border">
-                <div class="panel-heading">
-                    <span class="panel-title">
+<section id="content" class="table-layout animated fadeIn">
+    <div class="tray tray-center">
+        <div class="tab-content mw900 center-block center-children">
+            <!-- Registration 2 -->
+            <div class="admin-form theme-danger tab-pane mw800 active" id="register2" role="tabpanel">
+                <div class="panel panel-danger heading-border">
+                    <div class="panel-heading">
+                        <span class="panel-title">
                       <i class="fa fa-pencil-square"></i>{{user.action}}
                     </span>
-                </div>
-                <!-- end .form-header section -->
-                <form name="form" id="form-register2" ng-submit="user.add(form.$valid)" novalidate>
-                    <div class="panel-body p25">
-                        <div class="section-divider mt10 mb40">
-                            <span>请填写信息</span>
-                        </div>
-                        <!-- .section-divider -->
-                        <div class="section row">
-                            <div class="col-md-12">
-                                <label for="name" class="field prepend-icon">
-                                    <input type="text" name="name" id="name" class="gui-input" placeholder="真实姓名" ng-model="user.current_user.name" required />
-                                    <label for="name" class="field-icon">
-                                        <i class="fa fa-user"></i>
+                    </div>
+                    <!-- end .form-header section -->
+                    <form name="form" id="form-register2" ng-submit="user.add(form.$valid)" novalidate>
+                        <div class="panel-body p25">
+                            <div class="section-divider mt10 mb40">
+                                <span>请填写信息</span>
+                            </div>
+                            <!-- .section-divider -->
+                            <div class="section row">
+                                <div class="col-md-12">
+                                    <label for="name" class="field prepend-icon">
+                                        <input type="text" name="name" id="name" class="gui-input" placeholder="真实姓名" ng-model="user.current_user.name" required />
+                                        <label for="name" class="field-icon">
+                                            <i class="fa fa-user"></i>
+                                        </label>
+                                        <div ng-messages="form.name.$dirty && form.name.$error">
+                                            <em ng-message="required" for="name" class="state-error">请输入姓名</em>
+                                        </div>
                                     </label>
-                                    <div ng-messages="form.name.$dirty && form.name.$error">
-                                        <em ng-message="required" for="name" class="state-error">请输入姓名</em>
+                                </div>
+                                <!-- end section -->
+                            </div>
+                            <!-- end .section row section -->
+                            <div class="section">
+                                <label for="email" class="field prepend-icon">
+                                    <input type="email" name="email" id="email" class="gui-input" placeholder="邮箱" ng-model="user.current_user.email" required />
+                                    <label for="email" class="field-icon">
+                                        <i class="fa fa-envelope"></i>
+                                    </label>
+                                </label>
+                            </div>
+                            <!-- end section -->
+                            <div class="section">
+                                <label for="password" class="field prepend-icon">
+                                    <input type="password" name="password" id="password" class="gui-input" placeholder="输入密码" ng-model="user.current_user.password" required />
+                                    <label for="password" class="field-icon">
+                                        <i class="fa fa-lock"></i>
+                                    </label>
+                                    <div ng-messages="form.password.$dirty && form.password.$error">
+                                        <em ng-message="required" for="password" class="state-error">请输入密码</em>
                                     </div>
                                 </label>
                             </div>
                             <!-- end section -->
-                        </div>
-                        <!-- end .section row section -->
-                        <div class="section">
-                            <label for="email" class="field prepend-icon">
-                                <input type="email" name="email" id="email" class="gui-input" placeholder="邮箱" ng-model="user.current_user.email" required />
-                                <label for="email" class="field-icon">
-                                    <i class="fa fa-envelope"></i>
-                                </label>
-                            </label>
-                        </div>
-                        <!-- end section -->
-                        <div class="section">
-                            <label for="password" class="field prepend-icon">
-                                <input type="password" name="password" id="password" class="gui-input" placeholder="输入密码" ng-model="user.current_user.password" required />
-                                <label for="password" class="field-icon">
-                                    <i class="fa fa-lock"></i>
-                                </label>
-                                <div ng-messages="form.password.$dirty && form.password.$error">
-                                    <em ng-message="required" for="password" class="state-error">请输入密码</em>
-                                </div>
-                            </label>
-                        </div>
-                        <!-- end section -->
-                        <div class="section">
-                            <label for="repass" class="field prepend-icon">
-                                <input type="password" name="repass" id="repass" class="gui-input" placeholder="确认密码" ng-model="user.current_user.repass" required />
-                                <label for="repass" class="field-icon">
-                                    <i class="fa fa-unlock-alt"></i>
-                                </label>
-                                <div ng-messages="form.repass.$dirty && form.repass.$error">
-                                    <em ng-message="required" for="repass" class="state-error">请确认密码</em>
-                                </div>
-                            </label>
-                        </div>
-                        <!-- end section -->
-                        <div class="section-divider mv40">
-                            <span>请选择角色</span>
-                        </div>
-                        <!-- .section-divider -->
-                        <div class="section row">
-                            <div class="col-md-12 pl20 prn">
-                                <div class="section mv15">
-                                    <div class="option-group field">
-                                        <label class="option option-primary mb15" ng-repeat="role in user.role_list">
-                                            <input type="checkbox" name="selectedRoles[]" value="{{role.id}}" ng-model="role.selected">
-                                            <span class="checkbox"></span>{{role.name}}
-                                        </label>
+                            <div class="section">
+                                <label for="repass" class="field prepend-icon">
+                                    <input type="password" name="repass" id="repass" class="gui-input" placeholder="确认密码" ng-model="user.current_user.repass" required />
+                                    <label for="repass" class="field-icon">
+                                        <i class="fa fa-unlock-alt"></i>
+                                    </label>
+                                    <div ng-messages="form.repass.$dirty && form.repass.$error">
+                                        <em ng-message="required" for="repass" class="state-error">请确认密码</em>
                                     </div>
-                                    <!-- end .option-group section -->
+                                </label>
+                            </div>
+                            <!-- end section -->
+                            <div class="section-divider mv40">
+                                <span>请选择角色</span>
+                            </div>
+                            <!-- .section-divider -->
+                            <div class="section row">
+                                <div class="col-md-12 pl20 prn">
+                                    <div class="section mv15">
+                                        <div class="option-group field">
+                                            <label class="option option-primary mb15" ng-repeat="role in user.role_list">
+                                                <input type="checkbox" name="selectedRoles[]" value="{{role.id}}" ng-model="role.selected">
+                                                <span class="checkbox"></span>{{role.name}}
+                                            </label>
+                                        </div>
+                                        <!-- end .option-group section -->
+                                    </div>
+                                    <!-- end section -->
                                 </div>
-                                <!-- end section -->
                             </div>
                         </div>
-                    </div>
-                    <!-- end .form-body section -->
-                    <div class="panel-footer">
-                        <button type="submit" class="button btn-primary">提交</button>
-                    </div>
-                    <!-- end .form-footer section -->
-                </form>
+                        <!-- end .form-body section -->
+                        <div class="panel-footer">
+                            <button type="submit" class="button btn-primary">提交</button>
+                        </div>
+                        <!-- end .form-footer section -->
+                    </form>
+                </div>
+                <!-- end .admin-form section -->
             </div>
-            <!-- end .admin-form section -->
+            <!-- end: .admin-form -->
         </div>
-        <!-- end: .admin-form -->
     </div>
-</div>
+</section>

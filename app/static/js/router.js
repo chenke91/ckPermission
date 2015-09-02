@@ -17,11 +17,15 @@ myApp.config([ '$routeProvider', function($routeProvider) {
         templateUrl : '/static/templates/system/user_edit.html',
         controller : 'EditUserController'
     })
+    .when('/admin/roles', {
+        templateUrl: '/static/templates/system/roles.html'
+    })
     .when('/admin/permissions', {
         templateUrl: '/static/templates/system/permissions.html'
     })
     .when('/admin/modules', {
-        templateUrl: '/static/templates/system/modules.html'
+        templateUrl: '/static/templates/system/modules.html',
+        controller: 'ModuleController'
     })
     .otherwise({
         redirectTo : '/'

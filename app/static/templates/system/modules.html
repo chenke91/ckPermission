@@ -1,3 +1,142 @@
-<div>
-    模块管理
-</div>
+<section id="content" class="table-layout animated fadeIn">
+    <div class="tray tray-center">
+        <div class="row">
+            <div class="col-sm-8">
+                <div class="panel panel-primary panel-border top">
+                    <div class="panel-heading">
+                        <span class="panel-title"> Default Treeview</span>
+                    </div>
+                    <div class="panel-body bg-light dark">
+                        <div class="tree">
+                            <ul>
+                                <li ng-repeat="module in module_list">
+                                    <span><span class="{{module.icon || 'fa fa-user'}}"></span> {{module.name}}</span>
+                                    <ul>
+                                        <li ng-repeat="sub_module in module.sub_modules">
+                                            <span><span class="{{sub_module.icon || 'fa fa-user'}}"></span> {{sub_module.name}}</span>
+                                            <ul>
+                                                <li ng-repeat="sub_sub_module in sub_module.sub_module">
+                                                    <span><span class="{{sub_sub_module.icon || 'fa fa-user'}}"></span> {{sub_sub_module.name}}</span>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <!-- menu quick links -->
+                <div class="admin-form">
+                    <div class="panel heading-border panel-primary">
+                        <div class="panel-body bg-light">
+                            <form method="post" action="" id="form-ui">
+                                <div class="section-divider mb40" id="spy1">
+                                    <span>添加模块</span>
+                                </div>
+                                <!-- .section-divider -->
+                                <!-- Basic Inputs -->
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="section">
+                                            <label class="field">
+                                                <input type="text" name="from" id="from" class="gui-input" placeholder="模块名称">
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Input Icons -->
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="section">
+                                            <label class="field select">
+                                                <select id="country" name="country">
+                                                    <option value="">请选择顶级菜单</option>
+                                                    <option value=""></option>
+                                                    <option value="AL"></option>
+                                                </select>
+                                                <i class="arrow"></i>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="section">
+                                            <label class="field select">
+                                                <select id="country" name="country">
+                                                    <option value="">请选择子菜单</option>
+                                                    <option value="">可见</option>
+                                                    <option value="AL">隐藏</option>
+                                                </select>
+                                                <i class="arrow"></i>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Input Formats -->
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="section">
+                                            <label class="field prepend-icon">
+                                                <input type="url" name="website" id="website" class="gui-input" placeholder="Action">
+                                                <label for="website" class="field-icon">
+                                                    <i class="fa fa-globe"></i>
+                                                </label>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="section">
+                                            <label class="field prepend-icon">
+                                                <input type="url" name="website" id="website" class="gui-input" placeholder="Icon-图标">
+                                                <label for="website" class="field-icon">
+                                                    <i class="fa fa-globe"></i>
+                                                </label>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Multi Selects -->
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="section">
+                                            <label class="field select">
+                                                <select id="country" name="country">
+                                                    <option value="">请选择可见性</option>
+                                                    <option value="">可见</option>
+                                                    <option value="AL">隐藏</option>
+                                                </select>
+                                                <i class="arrow"></i>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="section">
+                                            <label class="field prepend-icon">
+                                                <input type="url" name="website" id="website" class="gui-input" placeholder="排序">
+                                                <label for="website" class="field-icon">
+                                                    <i class="fa fa-globe"></i>
+                                                </label>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <button type="submit" class="button btn-primary">保存</button>
+                                </div>
+                                <!-- end .form-footer section -->
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

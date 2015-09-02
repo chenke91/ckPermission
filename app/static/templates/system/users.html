@@ -1,65 +1,69 @@
-<div class="panel panel-visible" id="spy4">
-    <div class="panel-heading">
-        <div class="panel-title hidden-xs">
-            <span class="glyphicon glyphicon-tasks"></span>用户列表</div>
-    </div>
-    <div class="panel-body pn">
-        <div id="datatable2_wrapper" class="dataTables_wrapper form-inline dt-bootstrap no-footer">
-            <div class="dt-panelmenu clearfix">
-                <div class="dataTables_length" id="datatable2_length">
-                    <div class="DTTT btn-group" style="display: block;">
-                        <a class="btn btn-default btn-sm" ng-click="user.get_users()">刷新</a>
-                        <a class="btn btn-primary btn-sm" href="#/admin/new_user">新增</a>
-                    </div>
-                </div>
-                <div class="dt-abc-filter dataTables_filter">
-                    <span class="abc-label fa fa-filter">筛选</span>
-                    <input type="text" name="firstname" id="firstname" class="gui-input" placeholder="Filter" ng-model="user.query">
-                </div>
+<section id="content" class="table-layout animated fadeIn">
+    <div class="tray tray-center">
+        <div class="panel panel-visible" id="spy4">
+            <div class="panel-heading">
+                <div class="panel-title hidden-xs">
+                    <span class="glyphicon glyphicon-tasks"></span>用户列表</div>
             </div>
-            <table class="table table-striped table-hover display" id="datatable6" cellspacing="0" width="100%">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Email</th>
-                        <th>姓名</th>
-                        <th>权限</th>
-                        <th>角色</th>
-                        <th>操作</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr ng-repeat="data in user.users | filter:user.query">
-                        <td>{{ data.id }}</td>
-                        <td>{{ data.email }}</td>
-                        <td>{{ data.name }}</td>
-                        <td>{{ data.permissions }}</td>
-                        <td>
-                            <div class="btn-group" dropdown is-open="status.isopen">
-                              <button id="single-button" type="button" class="btn btn-default" dropdown-toggle ng-disabled="disabled">
-                                {{data.roles[0].name}} <span class="caret"></span>
-                              </button>
-                              <ul class="dropdown-menu" role="menu" aria-labelledby="single-button">
-                                <li role="menuitem" ng-repeat="role in data.roles"><a>{{role.name}}</a></li>
-                              </ul>
+            <div class="panel-body pn">
+                <div id="datatable2_wrapper" class="dataTables_wrapper form-inline dt-bootstrap no-footer">
+                    <div class="dt-panelmenu clearfix">
+                        <div class="dataTables_length" id="datatable2_length">
+                            <div class="DTTT btn-group" style="display: block;">
+                                <a class="btn btn-default btn-sm" ng-click="user.get_users()">刷新</a>
+                                <a class="btn btn-primary btn-sm" href="#/admin/new_user">新增</a>
                             </div>
-                        </td>    
-                        <td>
-                            <a href="#/admin/edit_user/{{data.id}}" class="btn btn-default btn-sm">编辑</a>
-                            <a href="javascript:;" class="btn btn-danger btn-sm" ng-if="data.avalible" ng-click="user.delete_toggle(data)">禁用</a>
-                            <a href="javascript:;" class="btn btn-success btn-sm" ng-if="!data.avalible" ng-click="user.delete_toggle(data)">恢复</a>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-            <div class="row">
-                <div class="col-sm-offset-1 col-sm-4" style="margin-top:25px;">
-                    Page: {{user.bigCurrentPage}} / {{user.numPages}}
-                </div>
-                <div class="col-sm-6">
-                    <pagination total-items="user.bigTotalItems" ng-model="user.bigCurrentPage" max-size="user.maxSize" class="pagination-sm" boundary-links="true" rotate="false" num-pages="user.numPages" ng-change="user.pageChanged()" items-per-page="user.itemsPerPage"></pagination>
+                        </div>
+                        <div class="dt-abc-filter dataTables_filter">
+                            <span class="abc-label fa fa-filter">筛选</span>
+                            <input type="text" name="firstname" id="firstname" class="gui-input" placeholder="Filter" ng-model="user.query">
+                        </div>
+                    </div>
+                    <table class="table table-striped table-hover display" id="datatable6" cellspacing="0" width="100%">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Email</th>
+                                <th>姓名</th>
+                                <th>权限</th>
+                                <th>角色</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="data in user.users | filter:user.query">
+                                <td>{{ data.id }}</td>
+                                <td>{{ data.email }}</td>
+                                <td>{{ data.name }}</td>
+                                <td>{{ data.permissions }}</td>
+                                <td>
+                                    <div class="btn-group" dropdown is-open="status.isopen">
+                                        <button id="single-button" type="button" class="btn btn-default" dropdown-toggle ng-disabled="disabled">
+                                            {{data.roles[0].name}} <span class="caret"></span>
+                                        </button>
+                                        <ul class="dropdown-menu" role="menu" aria-labelledby="single-button">
+                                            <li role="menuitem" ng-repeat="role in data.roles"><a>{{role.name}}</a></li>
+                                        </ul>
+                                    </div>
+                                </td>
+                                <td>
+                                    <a href="#/admin/edit_user/{{data.id}}" class="btn btn-default btn-sm">编辑</a>
+                                    <a href="javascript:;" class="btn btn-danger btn-sm" ng-if="data.avalible" ng-click="user.delete_toggle(data)">禁用</a>
+                                    <a href="javascript:;" class="btn btn-success btn-sm" ng-if="!data.avalible" ng-click="user.delete_toggle(data)">恢复</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="row">
+                        <div class="col-sm-offset-1 col-sm-4" style="margin-top:25px;">
+                            Page: {{user.bigCurrentPage}} / {{user.numPages}}
+                        </div>
+                        <div class="col-sm-6">
+                            <pagination total-items="user.bigTotalItems" ng-model="user.bigCurrentPage" max-size="user.maxSize" class="pagination-sm" boundary-links="true" rotate="false" num-pages="user.numPages" ng-change="user.pageChanged()" items-per-page="user.itemsPerPage"></pagination>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
+</section>

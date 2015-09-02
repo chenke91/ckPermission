@@ -165,6 +165,11 @@ class Module(db.Model):
     is_default = db.Column(db.Boolean, default=False)
     permission = db.Column(db.String(64), unique=True)
 
+    @staticmethod
+    def list():
+        modules = Module.query.all()
+        return modules_tree(modules)
+
     def to_dict(self):
         return {
             'id': self.id,

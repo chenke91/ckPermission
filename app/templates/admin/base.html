@@ -148,19 +148,8 @@
             </div>      
             <!-- Begin: Content -->
              {% block content %}
-            <section id="content" class="table-layout animated fadeIn">
-                <div class="tray tray-center"> 
-                    {% for message in get_flashed_messages() %}
-                    <div class="alert alert-system alert-dismissable">
-                      <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                      <i class="fa fa-cubes pr10"></i>
-                      {$=message}
-                    </div>
-                    {% endfor %}
-                    <ng-view>
-                    </ng-view>
-                </div>
-            </section>
+            <ng-view>
+            </ng-view>
             {% endblock %}
             <!-- End: Content -->
         </section>
@@ -185,6 +174,8 @@
     <script type="text/javascript" src="/static/js/app.js"></script>
     <script type="text/javascript" src="/static/js/users/controller.js"></script>
     <script type="text/javascript" src="/static/js/users/services.js"></script>
+    <script type="text/javascript" src="/static/js/modules/controller.js"></script>
+    <script type="text/javascript" src="/static/js/modules/services.js"></script>
     <script type="text/javascript" src="/static/js/router.js"></script>
     <script type="text/javascript">
     jQuery(document).ready(function() {
