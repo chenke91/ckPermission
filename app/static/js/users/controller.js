@@ -54,7 +54,11 @@ myApp.controller('UserController', function($rootScope, $scope, myAPIservice) {
             })
         },
         delete_toggle: function(user) {
-            user.avalible = !user.avalible;
+            myAPIservice.deleteToggleUser(user.id).then(function(resp) {
+                user.avalible = resp.data.avalible;
+            }, function(resp) {
+                alert(resp.data.message);
+            })
         },
         //分页
         maxSize : 8,
@@ -136,12 +140,10 @@ myApp.controller('EditUserController', function($scope, $rootScope, myAPIservice
         role_list: [],
         get_current_user: function(id) {
             myAPIservice.getUser(id).then(function(resp) {
-                if (resp.data.status == 0) {
-                    $scope.user.current_user = resp.data.data;
-                    $scope.user.role_list = resp.data.data.user_roles;
-                }
+                    $scope.user.current_user = resp.data;
+                    $scope.user.role_list = resp.data.user_roles;
             }, function(resp) {
-                if (resp.message) {
+                if (resp.data.message) {
                     $rootScope.addAlert('danger', resp.data.message);
                 } else {
                     $rootScope.addAlert('danger', '请求异常');

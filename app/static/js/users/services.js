@@ -19,13 +19,9 @@ myApp.service('myAPIservice', function($http, $rootScope) {
     // };
     this.newUser = function (data) {
         $http.post('/admin/users/new/', data).then(function(resp) {
-            if (resp.data.status == 0) {
-                $rootScope.addAlert('success', '新增成功');
-            } else {
-                $rootScope.addAlert('danger', resp.data.msg);
-            }
+            $rootScope.addAlert('success', '新增成功');
         }, function(resp) {
-            if (resp.message) {
+            if (resp.data.message) {
                 $rootScope.addAlert('danger', resp.data.message);
             } else {
                 $rootScope.addAlert('danger', '请求异常');
@@ -34,11 +30,7 @@ myApp.service('myAPIservice', function($http, $rootScope) {
     };
     this.updateUser = function(data, id) {
         $http.post('/admin/users/update/'+id+'/', data).then(function(resp) {
-            if (resp.data.status == 0) {
-                $rootScope.addAlert('success', '更新成功');
-            } else {
-                $rootScope.addAlert('danger', resp.data.msg);
-            }
+            $rootScope.addAlert('success', '更新成功');
         }, function(resp) {
             if (resp.message) {
                 $rootScope.addAlert('danger', resp.data.message);
@@ -46,5 +38,8 @@ myApp.service('myAPIservice', function($http, $rootScope) {
                 $rootScope.addAlert('danger', '请求异常');
             }
         })
+    };
+    this.deleteToggleUser = function(id) {
+        return $http.get('/admin/users/delete_toggle/'+id+'/');
     }
 })

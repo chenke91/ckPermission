@@ -36,5 +36,6 @@ def unauth_error(e):
 
 @main.app_errorhandler(JsonOutputException)
 def json_output(e):
-    res = {'status': 1, 'msg': str(e)}
-    return jsonify(res)
+    response = jsonify({'status': 1, 'message': str(e)})
+    response.status_code = 409
+    return response

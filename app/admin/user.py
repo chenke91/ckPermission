@@ -33,8 +33,7 @@ def get_user(id):
             tmp['selected'] = True
         user_roles.append(tmp)
     data['user_roles'] = user_roles
-    res = {'status': 0, 'data': data}
-    return jsonify(res)
+    return jsonify(data)
 
 @admin.route('/users/new/', methods=['GET', 'POST'])
 def new_user():
@@ -81,5 +80,14 @@ def update_user(id):
     db.session.add(user)
     db.session.commit()
     res = {'status': 0}
+    return jsonify(res)
+
+@admin.route('/users/delete_toggle/<int:id>/')
+def delete_toggle(id):
+    user = Admin.query.get_or_404(id)
+    user.avalible = not user.avalible
+    db.session.add(user)
+    db.session.commit()
+    res = {'id': user.id, 'avalible': user.avalible}
     return jsonify(res)
 
