@@ -53,8 +53,8 @@ myApp.controller('UserController', function($rootScope, $scope, myAPIservice) {
                 $scope.user.role_list = resp.items;
             })
         },
-        edit: function(user) {
-            alert(user.name);
+        delete_toggle: function(user) {
+            user.avalible = !user.avalible;
         },
         //分页
         maxSize : 8,

@@ -46,7 +46,8 @@
                         </td>    
                         <td>
                             <a href="#/admin/edit_user/{{data.id}}" class="btn btn-default btn-sm">编辑</a>
-                            <a href="javascript:;" class="btn btn-danger btn-sm" ng-click="user.delete(data)">禁用</a>
+                            <a href="javascript:;" class="btn btn-danger btn-sm" ng-if="data.avalible" ng-click="user.delete_toggle(data)">禁用</a>
+                            <a href="javascript:;" class="btn btn-success btn-sm" ng-if="!data.avalible" ng-click="user.delete_toggle(data)">恢复</a>
                         </td>
                     </tr>
                 </tbody>

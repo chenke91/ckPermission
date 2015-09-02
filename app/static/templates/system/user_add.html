@@ -9,7 +9,7 @@
                     </span>
                 </div>
                 <!-- end .form-header section -->
-                <form name="form" id="form-register2" ng-submit="user.add(form.$valid)">
+                <form name="form" id="form-register2" ng-submit="user.add(form.$valid)" novalidate>
                     <div class="panel-body p25">
                         <div class="section-divider mt10 mb40">
                             <span>请填写信息</span>
@@ -22,7 +22,9 @@
                                     <label for="name" class="field-icon">
                                         <i class="fa fa-user"></i>
                                     </label>
-                                    <em ng-show="form.name.$dirty && form.name.$error.required" for="name" class="state-error">请输入真实姓名</em>
+                                    <div ng-messages="form.name.$dirty && form.name.$error">
+                                        <em ng-message="required" for="name" class="state-error">请输入姓名</em>
+                                    </div>
                                 </label>
                             </div>
                             <!-- end section -->
@@ -34,7 +36,6 @@
                                 <label for="email" class="field-icon">
                                     <i class="fa fa-envelope"></i>
                                 </label>
-                                <em ng-show="form.password.$dirty && form.email.$error.required" for="email" class="state-error">请输入邮箱地址</em>
                             </label>
                         </div>
                         <!-- end section -->
@@ -44,7 +45,9 @@
                                 <label for="password" class="field-icon">
                                     <i class="fa fa-lock"></i>
                                 </label>
-                                <em ng-show="form.password.$dirty && form.password.$error.required" for="password" class="state-error">请输入密码</em>
+                                <div ng-messages="form.password.$dirty && form.password.$error">
+                                    <em ng-message="required" for="password" class="state-error">请输入密码</em>
+                                </div>
                             </label>
                         </div>
                         <!-- end section -->
@@ -54,7 +57,9 @@
                                 <label for="repass" class="field-icon">
                                     <i class="fa fa-unlock-alt"></i>
                                 </label>
-                                <em ng-show="form.repass.$dirty && form.repass.$error.required" for="repass" class="state-error">请确认密码</em>
+                                <div ng-messages="form.repass.$dirty && form.repass.$error">
+                                    <em ng-message="required" for="repass" class="state-error">请确认密码</em>
+                                </div>
                             </label>
                         </div>
                         <!-- end section -->
