@@ -1,7 +1,9 @@
 #encoding: utf-8
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask.ext.login import AnonymousUserMixin
+from sqlalchemy import func
 from .. import db, cache, login_manager
+import importlib
 
 admin_role = db.Table(
     'admin_role',
@@ -158,12 +160,14 @@ class Module(db.Model):
     pid = db.Column(db.Integer, default=0)
     is_show = db.Column(db.Boolean, default=True)
     action = db.Column(db.String(64), unique=True, index=True)
+    url = db.Column(db.String(64), unique=True)
     memo = db.Column(db.String(255))
     icon = db.Column(db.String(128))
     order = db.Column(db.Integer, default=0)
     status = db.Column(db.Integer, default=1)
+    level = db.Column(db.Integer, default=2) #模块等级 1一级模块 2二级 3三级
     is_default = db.Column(db.Boolean, default=False)
-    permission = db.Column(db.String(64), unique=True)
+    permission = db.Column(db.Integer)
 
     @staticmethod
     def list():
@@ -174,12 +178,51 @@ class Module(db.Model):
         return {
             'id': self.id,
             'name': self.name,
-            'pid': self.pid,
+            'pid': str(self.pid),
             'memo': self.memo,
             'icon': self.icon,
             'permission': self.permission,
+            'url': self.url,
             'action': '/' + self.action.replace('.', '/') if self.action else ''
         }
+
+    @staticmethod
+    def load():
+        load_modules = Module.query.\
+            filter_by(level=2).\
+            all()
+        for module in load_modules:
+            if not module.url:
+                continue
+            import_module_name = 'app' + module.url.replace('/', '.')
+            try:
+                m = importlib.import_module(import_module_name)
+            except:
+                continue
+            blueprint = import_module_name.split('.')[1]
+            for view_func in m.__dir__():
+                if view_func.startswith('__') or not\
+                        callable(getattr(m, view_func)) or not\
+                        getattr(m, view_func).__module__ == m.__name__:
+                    continue
+                action = '.'.join([blueprint, view_func])
+                if Module.query.filter_by(action=action).first():
+                    continue
+                doc = getattr(m, view_func).__doc__ or ''
+                module_obj = Module(
+                    name='-'.join((doc.strip(),view_func)),
+                    permission=module.permission,
+                    action=action,
+                    pid=module.id,
+                    is_show=False,
+                    level=3)
+                db.session.add(module_obj)
+        db.session.commit()
+
+    @staticmethod
+    def get_next_permission():
+        max_permission = db.session.query(func.max(Module.permission)).scalar()
+        return max_permission * 2
 
     def __repr__(self):
         return '<Module: {id}>'.format(id=self.id)
@@ -211,69 +254,55 @@ def init_auth():
     db.drop_all()
     db.create_all()
     admin = Admin(
-        email = 'admin@qq.com',
+        email = 'chenke91@qq.com',
         name = 'admin',
         password = '123456'
     )
     role = Role(
-        name = 'admin'
+        name = 'admin',
+        permissions = 65535
     )
     admin.roles.append(role)
     db.session.add(admin)
     db.session.commit()
     sys_moduel = Module(
         name = '系统管理',
-        permission = 2)
+        permission = 2,
+        level = 1)
 
     db.session.add(sys_moduel)
     db.session.commit()
-    Admin.generate_fake(role)
-    Role.generate_fake()
     user_module = Module(
         name = '用户管理',
-        icon = 'glyphicon glyphicon-user',
-        action = 'admin.users',
+        icon = 'fa fa-user',
+        url = '/admin/users',
         permission = 4,
         pid = sys_moduel.id)
-    new_user_module = Module(
-        name = '新增用户',
-        icon = 'glyphicon glyphicon-user',
-        action = 'admin.new_user',
-        permission = 64,
-        is_show = False,
-        pid = sys_moduel.id)
-
 
     role_module = Module(
         name = '角色管理',
-        icon = 'glyphicon glyphicon-user',
-        action = 'admin.roles',
+        icon = 'fa fa-sitemap',
+        url = '/admin/roles',
         permission = 8,
         pid = sys_moduel.id)
 
-    permission_module = Module(
-        name = '权限管理',
-        action = 'admin.permissions',
+    menu_module = Module(
+        name = '模块管理',
+        url = '/admin/modules',
         permission = 16,
-        icon = 'fa fa-gears',
+        icon = 'fa fa-th',
         pid = sys_moduel.id)
 
-    menu_module = Module(
-        name = '系统模块管理',
-        action = 'admin.modules',
+    icon_module = Module(
+        name = 'icons',
+        url = '/admin/icons',
         permission = 32,
-        icon = 'glyphicon glyphicon-folder-open',
+        icon = 'fa fa-leaf',
         pid = sys_moduel.id)
 
     db.session.add(user_module)
-    db.session.add(new_user_module)
     db.session.add(role_module)
-    db.session.add(permission_module)
     db.session.add(menu_module)
+    db.session.add(icon_module)
     db.session.commit()
-    role.add_permission(sys_moduel)
-    role.add_permission(user_module)
-    role.add_permission(new_user_module)
-    role.add_permission(role_module)
-    role.add_permission(permission_module)
-    role.add_permission(menu_module)
+    Module.load()

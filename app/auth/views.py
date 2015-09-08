@@ -12,13 +12,13 @@ def test():
 @auth.route('/login/', methods=['GET', 'POST'])
 def login():
     if not current_user.is_anonymous():
-        return redirect(url_for('main.index'))
+        return redirect('/#/')
     form = LoginFrom()
     if form.validate_on_submit():
         user = Admin.query.filter_by(email=form.email.data).first()
         if user is not None and user.verify_password(form.password.data):
             login_user(user)
-            return redirect(request.args.get('next') or url_for('main.index'))
+            return redirect(request.args.get('next') or '/#/')
         flash('password error')
     return render_template('admin/login.html', form=form)
 

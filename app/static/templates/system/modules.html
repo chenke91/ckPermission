@@ -4,19 +4,23 @@
             <div class="col-sm-8">
                 <div class="panel panel-primary panel-border top">
                     <div class="panel-heading">
-                        <span class="panel-title"> Default Treeview</span>
+                        <span class="panel-title"> 
+                        权限列表 | 
+                        <a href="javascript:;" ng-click="loadModule()">载入权限</a>
+                        </span>
+                        
                     </div>
                     <div class="panel-body bg-light dark">
                         <div class="tree">
                             <ul>
                                 <li ng-repeat="module in module_list">
-                                    <span><span class="{{module.icon || 'fa fa-user'}}"></span> {{module.name}}</span>
+                                    <span ng-click="setModule(module)"><span class="{{module.icon || 'fa fa-tasks'}}"></span> {{module.name}}</span>
                                     <ul>
                                         <li ng-repeat="sub_module in module.sub_modules">
-                                            <span><span class="{{sub_module.icon || 'fa fa-user'}}"></span> {{sub_module.name}}</span>
+                                            <span ng-click="setModule(sub_module)"><span class="{{sub_module.icon || 'fa fa-tasks'}}"></span> {{sub_module.name}}</span>
                                             <ul>
-                                                <li ng-repeat="sub_sub_module in sub_module.sub_module">
-                                                    <span><span class="{{sub_sub_module.icon || 'fa fa-user'}}"></span> {{sub_sub_module.name}}</span>
+                                                <li ng-repeat="sub_sub_module in sub_module.sub_modules">
+                                                    <span>{{sub_sub_module.name}}</span>
                                                 </li>
                                             </ul>
                                         </li>
@@ -32,9 +36,9 @@
                 <div class="admin-form">
                     <div class="panel heading-border panel-primary">
                         <div class="panel-body bg-light">
-                            <form method="post" action="" id="form-ui">
+                            <form id="form-ui" name="form" ng-submit="newModule()" novalidate>
                                 <div class="section-divider mb40" id="spy1">
-                                    <span>添加模块</span>
+                                    <span>添加/编辑 模块</span>
                                 </div>
                                 <!-- .section-divider -->
                                 <!-- Basic Inputs -->
@@ -42,8 +46,11 @@
                                     <div class="col-md-12">
                                         <div class="section">
                                             <label class="field">
-                                                <input type="text" name="from" id="from" class="gui-input" placeholder="模块名称">
+                                                <input type="text" name="name" id="name" class="gui-input" placeholder="模块名称" ng-model="current_module.name" required>
                                             </label>
+                                            <div ng-messages="form.name.$dirty && form.name.$error">
+                                                <em ng-message="required" for="name" class="state-error">请输入模块名</em>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -52,24 +59,8 @@
                                     <div class="col-md-12">
                                         <div class="section">
                                             <label class="field select">
-                                                <select id="country" name="country">
-                                                    <option value="">请选择顶级菜单</option>
-                                                    <option value=""></option>
-                                                    <option value="AL"></option>
-                                                </select>
-                                                <i class="arrow"></i>
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="section">
-                                            <label class="field select">
-                                                <select id="country" name="country">
-                                                    <option value="">请选择子菜单</option>
-                                                    <option value="">可见</option>
-                                                    <option value="AL">隐藏</option>
+                                                <select id="masters" name="masters" ng-model="current_module.pid">
+                                                    <option value="{{master.id}}" ng-repeat="master in masters">{{master.name}}</option>
                                                 </select>
                                                 <i class="arrow"></i>
                                             </label>
@@ -81,8 +72,8 @@
                                     <div class="col-md-12">
                                         <div class="section">
                                             <label class="field prepend-icon">
-                                                <input type="url" name="website" id="website" class="gui-input" placeholder="Action">
-                                                <label for="website" class="field-icon">
+                                                <input type="text" name="url" id="url" class="gui-input" placeholder="URL" ng-model="current_module.url">
+                                                <label for="url" class="field-icon">
                                                     <i class="fa fa-globe"></i>
                                                 </label>
                                             </label>
@@ -93,8 +84,8 @@
                                     <div class="col-md-12">
                                         <div class="section">
                                             <label class="field prepend-icon">
-                                                <input type="url" name="website" id="website" class="gui-input" placeholder="Icon-图标">
-                                                <label for="website" class="field-icon">
+                                                <input type="text" name="icon" id="icon" class="gui-input" placeholder="Icon-图标" ng-model="current_module.icon">
+                                                <label for="icon" class="field-icon">
                                                     <i class="fa fa-globe"></i>
                                                 </label>
                                             </label>
@@ -105,23 +96,9 @@
                                 <div class="row">
                                     <div class="col-md-12">
                                         <div class="section">
-                                            <label class="field select">
-                                                <select id="country" name="country">
-                                                    <option value="">请选择可见性</option>
-                                                    <option value="">可见</option>
-                                                    <option value="AL">隐藏</option>
-                                                </select>
-                                                <i class="arrow"></i>
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="section">
                                             <label class="field prepend-icon">
-                                                <input type="url" name="website" id="website" class="gui-input" placeholder="排序">
-                                                <label for="website" class="field-icon">
+                                                <input type="text" name="order" id="order" class="gui-input" placeholder="排序" ng-model="current_module.order">
+                                                <label for="order" class="field-icon">
                                                     <i class="fa fa-globe"></i>
                                                 </label>
                                             </label>

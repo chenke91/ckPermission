@@ -34,8 +34,20 @@ def unauth_error(e):
         return response
     return render_template('commons/401.html'), 401
 
+@main.app_errorhandler(400)
+def unauth_error(e):
+    if request.accept_mimetypes.accept_json and \
+            not request.accept_mimetypes.accept_html:
+        response = jsonify({
+            'status': 'BAD REQUEST',
+            'message': e.description if hasattr(e, 'description') else str(e)
+            })
+        response.status_code = 400
+        return response
+    return render_template('commons/401.html'), 401
+
 @main.app_errorhandler(JsonOutputException)
 def json_output(e):
-    response = jsonify({'status': 1, 'message': str(e)})
-    response.status_code = 409
+    response = jsonify({'status': 'BAD REQUEST', 'message': str(e)})
+    response.status_code = 400
     return response

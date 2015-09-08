@@ -1,11 +1,90 @@
 <section id="content" class="table-layout animated fadeIn">
     <div class="tray tray-center">
-    角色管理
-    </div>
-    <aside class="tray tray-right tray400" data-tray-height="match" style="height: 614px;">
-        <!-- menu quick links -->
-        <div class="admin-form">
-            权限列表
+        <div class="row">
+            <div class="col-sm-7">
+                <div class="panel panel-visible" id="spy4">
+                    <div class="panel-heading">
+                        <div class="panel-title hidden-xs">
+                            <span class="glyphicon glyphicon-tasks"></span>角色列表</div>
+                    </div>
+                    <div class="panel-body pn">
+                        <div id="datatable2_wrapper" class="dataTables_wrapper form-inline dt-bootstrap no-footer">
+                            <div class="dt-panelmenu clearfix">
+                                <div class="dataTables_length" id="datatable2_length">
+                                    <div class="DTTT btn-group" style="display: block;">
+                                        <a class="btn btn-default btn-sm" ng-click="getRoles()">刷新</a>
+                                    </div>
+                                </div>
+                                <div class="dt-abc-filter dataTables_filter">
+                                    <span class="abc-label fa fa-filter">筛选</span>
+                                    <input type="text" name="firstname" id="firstname" class="gui-input" placeholder="Filter" ng-model="query">
+                                </div>
+                            </div>
+                            <table class="table table-striped table-hover display" id="datatable6" cellspacing="0" width="100%">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>名称</th>
+                                        <th>权限</th>
+                                        <th>操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="data in roles | filter:query" ng-click="setRole(data)">
+                                        <td>{{ data.id }}</td>
+                                        <td>{{ data.name }}</td>
+                                        <td>{{ data.permissions }}</td>
+                                        <td>
+                                            <a href="javascript:;" class="btn btn-danger btn-sm" ng-click="">禁用</a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-5">
+                <div class="panel mb25 mt5">
+                    <form id="form-ui" name="form" ng-submit="updateRole()" novalidate>
+                        <div class="panel-heading">
+                            <span class="panel-title hidden-xs"> 添加/编辑 角色</span>
+                            <div class="pull-right">
+                                <button type="submit" class="btn btn-primary btn-sm">保存</button>
+                                <a type="button" class="btn btn-default btn-sm" ng-click="resetRole()">重置</a>
+                            </div>
+                        </div>
+                        <div class="panel-body p20 pb10">
+                            <div class="tab-content pn br-n admin-form">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="section">
+                                            <label class="field">
+                                                <input type="text" name="name" id="name" class="gui-input" placeholder="角色名称" ng-model="current_role.name" required>
+                                            </label>
+                                            <div ng-messages="form.name.$dirty && form.name.$error">
+                                                <em ng-message="required" for="name" class="state-error">请输入角色名</em>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tree">
+                                <ul>
+                                    <li ng-repeat="module in module_list">
+                                        <span><input type="checkbox" ng-model="module.selected" ng-click="updatePermission(module)"> <span class="{{module.icon || 'fa fa-tasks'}}"></span> {{module.name}}</span>
+                                        <ul>
+                                            <li ng-repeat="sub_module in module.sub_modules">
+                                                <span ng-click="setModule(sub_module)"><input type="checkbox" ng-model="sub_module.selected" ng-click="updatePermission(sub_module)"> <span class="{{sub_module.icon || 'fa fa-tasks'}}"></span> {{sub_module.name}}</span>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
-    </aside>
+    </div>
 </section>

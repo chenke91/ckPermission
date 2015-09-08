@@ -6,6 +6,7 @@
     <!-- Meta, title, CSS, favicons, etc. -->
     <meta charset="utf-8">
     <title>{% block title %}I have a blog{% endblock %}</title>
+    <meta name="csrf-token" content="{$=csrf_token()}">
     <meta name="description" content="AbsoluteAdmin - A Responsive HTML5 Admin UI Framework">
     <meta name="author" content="AbsoluteAdmin">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -40,14 +41,14 @@
                 </div>
                 <ul class="nav navbar-nav navbar-left">
                     <li class="hidden-xs" ng-repeat="module in menu.modules">
-                        <a href="#">
+                        <a href="javascript:;" ng-click="menu.selectModule($index)">
                             <span>{{module.name}}</span>
                         </a>
                     </li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <li class="dropdown menu-merge">
-                        <a href="#" class="dropdown-toggle fw600 p15" data-toggle="dropdown">
+                        <a class="dropdown-toggle fw600 p15" data-toggle="dropdown">
                             <img src="/static/images/avtar_default.jpg" alt="avatar" class="mw30 br64">
                             <span class="hidden-xs pl15"> admin </span>
                             <span class="caret caret-tp hidden-xs"></span>
@@ -94,7 +95,7 @@
                     <ul class="nav sidebar-menu">
                         <li class="sidebar-label pt20">菜单</li>
                         <li ng-repeat="module in menu.current_module.sub_modules">
-                            <a href="/#{{module.action}}">
+                            <a href="/#{{module.url}}">
                                 <span class="{{module.icon}}"></span>
                                 <span class="sidebar-title">{{module.name}}</span>
                                 <span class="caret" ng-show="module.has_sub"></span>
@@ -103,19 +104,6 @@
                               <li>
                                 <a href="" class="accordion-toggle">
                                   <span class="glyphicon glyphicon-edit"></span>submodule.name</a>
-                              </li>
-                            </ul>
-                        </li>
-                        <li>
-                            <a href="" class="accordion-toggle">
-                                <span class="fa fa-sign-out"></span>
-                                <span class="sidebar-title">test</span>
-                                <span class="caret"></span>
-                            </a>
-                            <ul class="nav sub-nav" style="">
-                              <li>
-                                <a href="">
-                                  <span class="glyphicon glyphicon-edit"></span>test</a>
                               </li>
                             </ul>
                         </li>
@@ -171,11 +159,15 @@
     <script src="/static/js/plugins/angularjs-dropdown-multiselect.js"></script>
     <script type="text/javascript" src="/static/js/plugins/lodash.min.js"></script>
     <script type="text/javascript" src="/static/js/plugins/ui-bootstrap-tpls.min.js"></script>
+    <script type="text/javascript" src="/static/js/plugins/ivh-treeview.min.js"></script>
     <script type="text/javascript" src="/static/js/app.js"></script>
+    <script type="text/javascript" src="/static/js/controller.js"></script>
     <script type="text/javascript" src="/static/js/users/controller.js"></script>
-    <script type="text/javascript" src="/static/js/users/services.js"></script>
+    <script type="text/javascript" src="/static/js/users/service.js"></script>
     <script type="text/javascript" src="/static/js/modules/controller.js"></script>
-    <script type="text/javascript" src="/static/js/modules/services.js"></script>
+    <script type="text/javascript" src="/static/js/modules/service.js"></script>
+    <script type="text/javascript" src="/static/js/roles/controller.js"></script>
+    <script type="text/javascript" src="/static/js/roles/service.js"></script>
     <script type="text/javascript" src="/static/js/router.js"></script>
     <script type="text/javascript">
     jQuery(document).ready(function() {

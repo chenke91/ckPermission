@@ -21,6 +21,9 @@ div.tree li > span {
     font-size: 16px;
     padding: 1px
 }
+div.tree li > span.active {
+    background-color: #3498db;
+}
 div.tree li > span:hover, div.tree li > span:focus, div.tree li > span:active {
     background-color: #3498db;
 }

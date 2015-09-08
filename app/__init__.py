@@ -5,6 +5,7 @@ from flask.ext.moment import Moment
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.login import LoginManager
 from flask.ext.cache import Cache
+from flask_wtf.csrf import CsrfProtect
 from factories import Jinja2
 from config import config
 
@@ -16,6 +17,7 @@ login_manager.session_protection = 'strong'
 login_manager.login_view = 'auth.login'
 cache = Cache()
 jinja2 = Jinja2()
+csrf = CsrfProtect()
 
 def create_app(config_name):
     app = Flask(__name__)
@@ -29,6 +31,7 @@ def create_app(config_name):
     login_manager.init_app(app)
     register_routes(app)
     jinja2.init_app(app)
+    csrf.init_app(app)
     
     return app
 

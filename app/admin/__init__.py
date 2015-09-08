@@ -4,4 +4,4 @@ from flask.ext.login import login_required
 
 admin = Blueprint('admin', __name__)
 
-from . import menus, request_decorator, user, role, modules
+from . import menus, request_decorator, users, roles, modules

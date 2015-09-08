@@ -18,7 +18,8 @@ myApp.config([ '$routeProvider', function($routeProvider) {
         controller : 'EditUserController'
     })
     .when('/admin/roles', {
-        templateUrl: '/static/templates/system/roles.html'
+        templateUrl: '/static/templates/system/roles.html',
+        controller: 'RoleController'
     })
     .when('/admin/permissions', {
         templateUrl: '/static/templates/system/permissions.html'
@@ -26,6 +27,9 @@ myApp.config([ '$routeProvider', function($routeProvider) {
     .when('/admin/modules', {
         templateUrl: '/static/templates/system/modules.html',
         controller: 'ModuleController'
+    })
+    .when('/admin/icons', {
+        templateUrl: '/static/templates/system/icons.html'
     })
     .otherwise({
         redirectTo : '/'

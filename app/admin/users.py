@@ -9,6 +9,9 @@ from . import admin
 
 @admin.route('/users/')
 def users():
+    '''
+    用户列表
+    '''
     page = int(request.args.get('page', 1))
     per_page = int(request.args.get('per_page', 10))
     pagination = Admin.query\
@@ -22,6 +25,9 @@ def users():
 
 @admin.route('/users/<int:id>/')
 def get_user(id):
+    '''
+    获取用户
+    '''
     user = Admin.query.get_or_404(id)
     data = user.to_dict()
     roles = Role.query.all()
@@ -37,6 +43,9 @@ def get_user(id):
 
 @admin.route('/users/new/', methods=['GET', 'POST'])
 def new_user():
+    '''
+    新增
+    '''
     name = request.json.get('name')
     email = request.json.get('email')
     password = request.json.get('password')
@@ -57,6 +66,9 @@ def new_user():
 
 @admin.route('/users/update/<int:id>/', methods=['GET', 'POST'])
 def update_user(id):
+    '''
+    更新
+    '''
     name = request.json.get('name')
     email = request.json.get('email')
     password = request.json.get('password')
@@ -84,6 +96,9 @@ def update_user(id):
 
 @admin.route('/users/delete_toggle/<int:id>/')
 def delete_toggle(id):
+    '''
+    删除
+    '''
     user = Admin.query.get_or_404(id)
     user.avalible = not user.avalible
     db.session.add(user)
