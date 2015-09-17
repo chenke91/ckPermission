@@ -49,16 +49,15 @@
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <li class="dropdown menu-merge">
-                        <a class="dropdown-toggle fw600 p15" data-toggle="dropdown">
-                            <img src="/static/images/avtar_default.jpg" alt="avatar" class="mw30 br64">
-                            <span class="hidden-xs pl15"> admin </span>
+                        <a href="javascript:;" class="dropdown-toggle fw600 p15" data-toggle="dropdown">
+                            <img src="{$=current_user.avatar}" alt="avatar" class="mw30 br64">
+                            <span class="hidden-xs pl15"> {$=current_user.name} </span>
                             <span class="caret caret-tp hidden-xs"></span>
                         </a>
                         <ul class="dropdown-menu list-group dropdown-persist w250" role="menu">
                             <li class="list-group-item">
-                                <a href="#" class="animated animated-short fadeInUp">
+                                <a href="javascript:;" ui-sref="profile" class="animated animated-short fadeInUp">
                                     <span class="fa fa-user"></span> 个人信息
-                                    <span class="label label-warning">6</span>
                                 </a>
                             </li>
                             <li class="dropdown-footer">
@@ -80,13 +79,13 @@
                       <div class="sidebar-widget author-widget">
                         <div class="media">
                           <a class="media-left" href="">
-                            <img src="/static/images/avtar_default.jpg" class="img-responsive">
+                            <img src="{$=current_user.avatar}" class="img-responsive">
                           </a>
                           <div class="media-body">
                             <div class="media-links">
-                               <a href="#" class="sidebar-menu-toggle">用户菜单 -</a> <a href="{$=url_for('auth.logout')}">登出</a>
+                               <a ui-sref="profile" class="sidebar-menu-toggle">个人中心 -</a> <a href="{$=url_for('auth.logout')}">登出</a>
                             </div>
-                            <div class="media-author">Admin</div>
+                            <div class="media-author">{$=current_user.name}</div>
                           </div>
                         </div>
                       </div>

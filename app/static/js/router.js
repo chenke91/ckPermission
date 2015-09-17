@@ -13,6 +13,11 @@
                 url: '/',
                 templateUrl: '/static/templates/index.html'
             })
+            .state('profile', {
+                url: '/profile',
+                templateUrl: '/static/templates/system/profile.html',
+                controller: 'profileController'
+            })
             .state('/admin/users', {
                 url: '/admin/users',
                 templateUrl : '/static/templates/system/users.html',

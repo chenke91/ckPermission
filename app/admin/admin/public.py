@@ -9,3 +9,8 @@ def menu():
     modules = current_user.module_list()
     res = {'modules': modules}
     return jsonify(res)
+
+@admin_blueprint.route('/current_user/')
+def current_user_view():
+    res = current_user.to_dict()
+    return jsonify(res);

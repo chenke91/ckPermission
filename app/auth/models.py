@@ -34,6 +34,7 @@ class Admin(db.Model, PermissionMixin):
     password_hash = db.Column(db.String(128))
     name = db.Column(db.String(64), index=True)
     permissions = db.Column(db.String(64), default=0)
+    avatar_src = db.Column(db.String(256))
     avalible = db.Column(db.Boolean, default=True)
     roles = db.relationship('Role',
                             secondary=admin_role,
@@ -51,6 +52,15 @@ class Admin(db.Model, PermissionMixin):
 
     def get_id(self):
         return self.id
+
+    @property
+    def avatar(self):
+        return self.avatar_src or '/static/images/avatars/default.jpg'
+
+    @avatar.setter
+    def avatar(self, avatar):
+        self.avatar_src = avatar
+    
 
     @property
     def password(self):
@@ -99,6 +109,7 @@ class Admin(db.Model, PermissionMixin):
             'id': self.id,
             'email': self.email,
             'name': self.name,
+            'avatar': self.avatar,
             'permissions': self.__whole_permissions(),
             'avalible': self.avalible,
             'roles': [role.to_dict() for role in self.roles.all()]

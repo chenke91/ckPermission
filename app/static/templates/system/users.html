@@ -23,6 +23,7 @@
                         <thead>
                             <tr>
                                 <th>ID</th>
+                                <th>头像</th>
                                 <th>Email</th>
                                 <th>姓名</th>
                                 <th>权限</th>
@@ -33,6 +34,9 @@
                         <tbody>
                             <tr ng-repeat="data in user.users | filter:user.query">
                                 <td>{{ data.id }}</td>
+                                <td class="w50">
+                                    <img class="img-responsive mw30 ib mr10" title="user" src="{{ data.avatar }}">
+                                </td>
                                 <td>{{ data.email }}</td>
                                 <td>{{ data.name }}</td>
                                 <td>{{ data.permissions }}</td>
