@@ -1,21 +1,32 @@
-'use strict';
+(function() {
+    'use strict';
 
-var myApp = angular.module('myApp',
-    ['ui.bootstrap',
-    'angularjs-dropdown-multiselect',
-    'ngMessages',
-    'angular-loading-bar',
-    'ui.router']);
+    angular.module('myApp',
+        ['ui.bootstrap',
+        'angularjs-dropdown-multiselect',
+        'ngMessages',
+        'angular-loading-bar',
+        'ui.router']);
 
 
-var csrftoken = $('meta[name=csrf-token]').attr('content');
+    var csrftoken = $('meta[name=csrf-token]').attr('content');
 
-myApp.config(['$httpProvider', function($httpProvider) {
-    $httpProvider.defaults.headers.common['Accept'] = 'application/json';
-    $httpProvider.defaults.headers.post['X-CSRFToken'] = csrftoken;
-    $httpProvider.interceptors.push('errorResponse');
-}])
+    angular
+        .module('myApp')
+        .config(httpSetting)
+        .run(runApp);
 
-myApp.run(function($rootScope) {
-    $rootScope.alerts = [];
-})
+    httpSetting.$inject = ['$httpProvider'];
+    runApp.$inject = ['$rootScope'];
+
+    function httpSetting($httpProvider) {
+        $httpProvider.defaults.headers.common['Accept'] = 'application/json';
+        $httpProvider.defaults.headers.post['X-CSRFToken'] = csrftoken;
+        $httpProvider.interceptors.push('errorResponse');
+    }
+
+    function runApp($rootScope) {
+        $rootScope.alerts = [];
+    }
+
+})()
