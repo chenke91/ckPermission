@@ -78,7 +78,7 @@ class Admin(db.Model, PermissionMixin):
         if res is None:
             module = Module.query.filter_by(action=action).first()
             if not module:
-                res = False
+                res = True
             else:
                 whole_permissions = self.__whole_permissions()
                 res = bool(whole_permissions & int(module.permission))
