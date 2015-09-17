@@ -39,7 +39,7 @@ def register_routes(app):
     from .main import main as main_blueprint
     from .api_v1 import api_blueprint
     from .auth import auth as auth_blueprint
-    from .admin import admin as admin_blueprint
+    from .admin import admin_blueprint
 
     app.register_blueprint(main_blueprint)
     app.register_blueprint(api_blueprint, url_prefix='/api/v1')

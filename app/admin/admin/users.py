@@ -4,10 +4,10 @@ from flask import jsonify, request, abort
 from flask.ext.login import current_user
 from app import db
 from app.exceptions import JsonOutputException
-from ..auth.models import Admin, Role
-from . import admin
+from app.auth.models import Admin, Role
+from .. import admin_blueprint
 
-@admin.route('/users/')
+@admin_blueprint.route('/users/')
 def users():
     '''
     用户列表
@@ -23,7 +23,7 @@ def users():
     }
     return jsonify(res)
 
-@admin.route('/users/<int:id>/')
+@admin_blueprint.route('/users/<int:id>/')
 def get_user(id):
     '''
     获取用户
@@ -41,7 +41,7 @@ def get_user(id):
     data['user_roles'] = user_roles
     return jsonify(data)
 
-@admin.route('/users/new/', methods=['GET', 'POST'])
+@admin_blueprint.route('/users/new/', methods=['GET', 'POST'])
 def new_user():
     '''
     新增
@@ -64,7 +64,7 @@ def new_user():
     res = {'status': 0}
     return jsonify(res)
 
-@admin.route('/users/update/<int:id>/', methods=['GET', 'POST'])
+@admin_blueprint.route('/users/update/<int:id>/', methods=['GET', 'POST'])
 def update_user(id):
     '''
     更新
@@ -94,7 +94,7 @@ def update_user(id):
     res = {'status': 0}
     return jsonify(res)
 
-@admin.route('/users/delete_toggle/<int:id>/')
+@admin_blueprint.route('/users/delete_toggle/<int:id>/')
 def delete_toggle(id):
     '''
     删除

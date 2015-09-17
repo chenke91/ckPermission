@@ -2,9 +2,9 @@
 
 from flask import jsonify
 from flask.ext.login import current_user
-from . import admin
+from .. import admin_blueprint
 
-@admin.route('/menus/')
+@admin_blueprint.route('/menus/')
 def menu():
     modules = current_user.module_list()
     res = {'modules': modules}

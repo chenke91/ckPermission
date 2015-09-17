@@ -4,13 +4,13 @@ from flask import jsonify, request, abort, url_for
 from flask.ext.login import current_user
 from app import db
 from app.exceptions import JsonOutputException
-from ..auth.models import Module
-from . import admin
+from app.auth.models import Module
+from .. import admin_blueprint
 from .forms import ModuleFrom
 from sqlalchemy.exc import IntegrityError
 import importlib
 
-@admin.route('/modules/')
+@admin_blueprint.route('/modules/')
 def modules():
     '''
     模块列表
@@ -19,7 +19,7 @@ def modules():
     res = {'items': items}
     return jsonify(res)
 
-@admin.route('/modules/load/')
+@admin_blueprint.route('/modules/load/')
 def load_permission():
     '''
     载入权限
@@ -27,7 +27,7 @@ def load_permission():
     Module.load()
     return jsonify({})
 
-@admin.route('/modules/add/', methods=['POST'])
+@admin_blueprint.route('/modules/add/', methods=['POST'])
 def add_module():
     '''
     新增/编辑
@@ -67,7 +67,7 @@ def add_module():
             raise JsonOutputException(error)
     raise JsonOutputException('请求失败')
 
-@admin.route('/modules/masters/')
+@admin_blueprint.route('/modules/masters/')
 def get_master():
     '''
     获取主菜单

@@ -6,28 +6,13 @@
                     <div class="panel-heading">
                         <span class="panel-title"> 
                         权限列表 | 
-                        <a href="javascript:;" ng-click="loadModule()">载入权限</a>
+                        <a href="javascript:;" ng-click="loadModule()">载入权限 |</a>
+                        <a href="javascript:;" ng-click="resetModule()">重置模块</a>
                         </span>
                         
                     </div>
                     <div class="panel-body bg-light dark">
-                        <div class="tree">
-                            <ul>
-                                <li ng-repeat="module in module_list">
-                                    <span ng-click="setModule(module)"><span class="{{module.icon || 'fa fa-tasks'}}"></span> {{module.name}}</span>
-                                    <ul>
-                                        <li ng-repeat="sub_module in module.sub_modules">
-                                            <span ng-click="setModule(sub_module)"><span class="{{sub_module.icon || 'fa fa-tasks'}}"></span> {{sub_module.name}}</span>
-                                            <ul>
-                                                <li ng-repeat="sub_sub_module in sub_module.sub_modules">
-                                                    <span>{{sub_sub_module.name}}</span>
-                                                </li>
-                                            </ul>
-                                        </li>
-                                    </ul>
-                                </li>
-                            </ul>
-                        </div>
+                        <module-tree modules="module_list" setfunc="setModule(module)"></module-tree>
                     </div>
                 </div>
             </div>

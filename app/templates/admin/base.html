@@ -19,6 +19,7 @@
     <link rel="stylesheet" type="text/css" href="{$=url_for('static', filename='css/style.css')}">
     <!-- Favicon -->
     <link rel="shortcut icon" href="{$=url_for('static', filename='assets/img/favicon.ico')}">
+    <link rel='stylesheet' href='/static/css/loading-bar.css' type='text/css' media='all' />
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
   <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
@@ -136,8 +137,8 @@
             </div>      
             <!-- Begin: Content -->
              {% block content %}
-            <ng-view>
-            </ng-view>
+            <ui-view>
+            </ui-view>
             {% endblock %}
             <!-- End: Content -->
         </section>
@@ -157,18 +158,22 @@
     <script src="/static/js/plugins/angular-route.min.js"></script>
     <script src="/static/js/plugins/angular-messages.js"></script>
     <script src="/static/js/plugins/angularjs-dropdown-multiselect.js"></script>
-    <script type="text/javascript" src="/static/js/plugins/lodash.min.js"></script>
-    <script type="text/javascript" src="/static/js/plugins/ui-bootstrap-tpls.min.js"></script>
-    <script type="text/javascript" src="/static/js/plugins/ivh-treeview.min.js"></script>
-    <script type="text/javascript" src="/static/js/app.js"></script>
-    <script type="text/javascript" src="/static/js/controller.js"></script>
-    <script type="text/javascript" src="/static/js/users/controller.js"></script>
-    <script type="text/javascript" src="/static/js/users/service.js"></script>
-    <script type="text/javascript" src="/static/js/modules/controller.js"></script>
-    <script type="text/javascript" src="/static/js/modules/service.js"></script>
-    <script type="text/javascript" src="/static/js/roles/controller.js"></script>
-    <script type="text/javascript" src="/static/js/roles/service.js"></script>
-    <script type="text/javascript" src="/static/js/router.js"></script>
+    <script src="/static/js/plugins/lodash.min.js"></script>
+    <script src="/static/js/plugins/ui-bootstrap-tpls.min.js"></script>
+    <script src="/static/js/plugins/angular-ui-router.js"></script>
+    <script src="/static/js/plugins/ivh-treeview.min.js"></script>
+    <script src='/static/js/plugins/loading-bar.js'></script>
+    <script src="/static/js/app.js"></script>
+    <script src="/static/js/controller.js"></script>
+    <script src="/static/js/users/controller.js"></script>
+    <script src="/static/js/users/service.js"></script>
+    <script src="/static/js/modules/controller.js"></script>
+    <script src="/static/js/modules/service.js"></script>
+    <script src="/static/js/roles/controller.js"></script>
+    <script src="/static/js/roles/service.js"></script>
+    <script src="/static/js/router.js"></script>
+    <script src="/static/js/directives.js"></script>
+    <script src="/static/js/services.js"></script>
     <script type="text/javascript">
     jQuery(document).ready(function() {
 

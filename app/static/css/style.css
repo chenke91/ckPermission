@@ -26,4 +26,5 @@ div.tree li > span.active {
 }
 div.tree li > span:hover, div.tree li > span:focus, div.tree li > span:active {
     background-color: #3498db;
+    cursor:pointer;
 }

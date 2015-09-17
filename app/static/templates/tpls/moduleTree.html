@@ -1,0 +1,17 @@
+<div class="tree">
+    <ul>
+        <li ng-repeat="module in modules">
+            <span ng-click="setfunc({module:module});toggle(module);"><span class="{{module.icon || 'fa fa-tasks'}}"></span> {{module.name}}</span>
+            <ul ng-show="module.show">
+                <li ng-repeat="sub_module in module.sub_modules">
+                    <span ng-click="setfunc({module:sub_module});toggle(sub_module)"><span class="{{sub_module.icon || 'fa fa-tasks'}}"></span> {{sub_module.name}}</span>
+                    <ul ng-show="sub_module.show">
+                        <li ng-repeat="sub_sub_module in sub_module.sub_modules">
+                            <span>{{sub_sub_module.name}}</span>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </li>
+    </ul>
+</div>

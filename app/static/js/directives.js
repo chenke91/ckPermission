@@ -1,10 +1,25 @@
-"use strict";
+(function() {
+    "use strict";
 
-myApp.directive('myNav', function() {
-    var config = {
-        restrict: "E",
-        templateUrl: "/admin/nav.html",
-        replace: true
-    };
-    return config;
-})
+    angular
+        .module('myApp')
+        .directive('moduleTree', moduleTree);
+
+    function moduleTree() {
+        var config = {
+            restrict: "E",
+            templateUrl: "/static/templates/tpls/moduleTree.html",
+            replace: true,
+            scope: {
+                modules: '=',
+                setfunc: '&'
+            },
+            link: function(scope, element, attrs) {
+                scope.toggle = function(module) {
+                    module.show = !module.show;
+                }
+            }
+        };
+        return config;
+    }
+})()

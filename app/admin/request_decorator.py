@@ -2,10 +2,10 @@
 
 from flask import request, abort, redirect, url_for
 from flask.ext.login import current_user
-from . import admin
+from . import admin_blueprint
 
 #权限验证
-@admin.before_request
+@admin_blueprint.before_request
 def before_request():
     ignore = ['admin.menu']
     endpoint = request.endpoint

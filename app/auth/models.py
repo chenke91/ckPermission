@@ -194,12 +194,12 @@ class Module(db.Model):
         for module in load_modules:
             if not module.url:
                 continue
-            import_module_name = 'app' + module.url.replace('/', '.')
+            import_module_name = 'app.admin' + module.url.replace('/', '.')
             try:
                 m = importlib.import_module(import_module_name)
             except:
                 continue
-            blueprint = import_module_name.split('.')[1]
+            blueprint = 'admin'
             for view_func in m.__dir__():
                 if view_func.startswith('__') or not\
                         callable(getattr(m, view_func)) or not\

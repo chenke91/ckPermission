@@ -2,6 +2,7 @@
 from flask import Blueprint, render_template
 from flask.ext.login import login_required
 
-admin = Blueprint('admin', __name__)
+admin_blueprint = Blueprint('admin', __name__)
 
-from . import menus, request_decorator, users, roles, modules
+from . import request_decorator
+from .admin import menus, users, roles, modules

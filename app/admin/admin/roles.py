@@ -3,12 +3,12 @@
 from flask import jsonify, request
 from flask.ext.login import current_user
 from app.exceptions import JsonOutputException
-from app import db
+from app import db, cache
 from sqlalchemy.exc import IntegrityError
-from ..auth.models import Role, Module
-from . import admin
+from app.auth.models import Role, Module
+from .. import admin_blueprint
 
-@admin.route('/roles/')
+@admin_blueprint.route('/roles/')
 def roles():
     '''
     角色列表
@@ -19,7 +19,7 @@ def roles():
     }
     return jsonify(res)
 
-@admin.route('/roles/update/', methods=['POST'])
+@admin_blueprint.route('/roles/update/', methods=['POST'])
 def update():
     '''
     新增/编辑用户
@@ -42,12 +42,13 @@ def update():
     db.session.add(role)
     try:
         db.session.commit()
+        cache.clear()
     except IntegrityError:
         raise JsonOutputException('该用户名已被使用')
     res = {'item': role.to_dict(), 'msg': msg}
     return jsonify(res)
 
-@admin.route('/roles/modules/')
+@admin_blueprint.route('/roles/modules/')
 def roles_modules():
     '''
     模块列表
