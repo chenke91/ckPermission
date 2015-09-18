@@ -22,4 +22,4 @@
             return $http.get('/admin/modules/masters/');
         };
     }
-})()
+})();

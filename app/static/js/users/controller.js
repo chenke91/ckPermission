@@ -40,7 +40,9 @@
                     user.avalible = resp.data.avalible;
                 })
             },
-            //分页
+            /*
+                分页
+            */
             maxSize : 8,
             bigTotalItems: 0,
             bigCurrentPage: 1,
@@ -48,7 +50,9 @@
             pageChanged: function() {
                 this.get_users();
             },
-            //multi_drop_down
+            /*
+                multi_drop_down
+            */
             role_list: [],
             settings: {
                 smartButtonMaxItems: 3,
@@ -146,4 +150,4 @@
         };
         $scope.user.init();
     }
-})()
+})();

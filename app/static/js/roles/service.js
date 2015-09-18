@@ -18,4 +18,4 @@
             return $http.get('/admin/roles/modules/');
         }
     }
-})()
+})();

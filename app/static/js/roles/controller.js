@@ -65,4 +65,4 @@
         $scope.getRoles();
         $scope.getModules();
     }
-})()
+})();

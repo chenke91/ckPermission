@@ -28,6 +28,12 @@ def init_app():
     from app.auth.models import init_auth
     init_auth()
 
+@manager.command
+def compilejs():
+    from app.bin.compilejs import compile
+    folder = '/home/vagrant/www/ckPermission/app/static/js'
+    compile(folder, ['plugins'])
+
 
 if __name__ == '__main__':
     manager.run()

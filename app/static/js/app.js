@@ -29,4 +29,4 @@
         $rootScope.alerts = [];
     }
 
-})()
+})();

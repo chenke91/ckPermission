@@ -38,4 +38,4 @@
             return $http.get('/admin/users/delete_toggle/'+id+'/');
         }
     }
-})()
+})();
