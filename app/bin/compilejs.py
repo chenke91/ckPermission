@@ -23,10 +23,10 @@ def compile(folder, ignores=[]):
     if os.path.isfile(compile_file):
         os.remove(compile_file)
     files = get_files(folder, ignores)
-    print(files)
     new_file = os.path.join(folder, 'compile.js')
     with open(new_file, 'a') as f:
         for file in files:
             with open(file, 'r') as rf:
                 content = rf.read()
                 f.write(content)
+                print(file + ' success')
