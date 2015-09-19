@@ -1,5 +1,5 @@
 (function() {
-    'use strict'
+    'use strict';
     angular
         .module('myApp')
         .factory('notify', notify)

@@ -11,6 +11,9 @@ class Config:
 
     APP_DIR = os.path.join(basedir, 'app')
 
+    JS_FOLDER = os.path.join(APP_DIR, 'static/js')
+    JS_CPL_INCLUDES = ['app', 'admin']
+
     PER_PAGE = 20
     @staticmethod
     def init_app(app):

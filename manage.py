@@ -1,6 +1,7 @@
 #coding:utf-8
 
 import os
+from flask import current_app
 from flask.ext.script import Manager, Shell
 from flask.ext.migrate import Migrate, MigrateCommand
 from app import create_app, db
@@ -31,8 +32,9 @@ def init_app():
 @manager.command
 def compilejs():
     from app.bin.compilejs import compile
-    folder = '/home/vagrant/www/ckPermission/app/static/js'
-    compile(folder, ['plugins'])
+    folder = current_app.config['JS_FOLDER']
+    includes = current_app.config['JS_CPL_INCLUDES']
+    compile(folder, includes)
 
 
 if __name__ == '__main__':
