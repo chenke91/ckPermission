@@ -181,7 +181,7 @@
     function errorResponse($q, notify) {
         return {
             responseError: function(rejection) {
-                if (rejection.status == 400) {
+                if (rejection.data.message) {
                     notify.error(rejection.data.message);
                 }
                 return $q.reject(rejection);
