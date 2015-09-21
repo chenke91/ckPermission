@@ -5,9 +5,9 @@
         .module('myApp')
         .service('userAPIservice', userAPIservice);
 
-    userAPIservice.$inject = ['$http', 'notify'];
+    userAPIservice.$inject = ['$http', 'mynotify'];
 
-    function userAPIservice($http, notify) {
+    function userAPIservice($http, mynotify) {
 
         this.getMenu = function() {
             return $http.get('/admin/menus/');
@@ -26,12 +26,12 @@
         };
         this.newUser = function (data) {
             $http.post('/admin/users/new/', data).then(function(resp) {
-                notify.success('新增成功');
+                mynotify.success('新增成功');
             })
         };
         this.updateUser = function(data, id) {
             $http.post('/admin/users/update/'+id+'/', data).then(function(resp) {
-                notify.success('更新成功');
+                mynotify.success('更新成功');
             })
         };
         this.deleteToggleUser = function(id) {

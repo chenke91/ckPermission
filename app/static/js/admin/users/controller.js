@@ -7,11 +7,11 @@
         .controller('NewUserController', newUserController)
         .controller('EditUserController', editUserController);
 
-    userController.$inject = ['$rootScope', '$scope', 'userAPIservice', 'notify'];
-    newUserController.$inject = ['$rootScope', '$scope', 'userAPIservice', 'notify'];
-    editUserController.$inject = ['$rootScope', '$scope', '$stateParams', 'userAPIservice', 'notify'];
+    userController.$inject = ['$rootScope', '$scope', 'userAPIservice', 'mynotify'];
+    newUserController.$inject = ['$rootScope', '$scope', 'userAPIservice', 'mynotify'];
+    editUserController.$inject = ['$rootScope', '$scope', '$stateParams', 'userAPIservice', 'mynotify'];
 
-    function userController($rootScope, $scope, userAPIservice, notify) {
+    function userController($rootScope, $scope, userAPIservice, mynotify) {
         $rootScope.trace = [
             {url: '#/admin/users',
              name: '用户管理'}
@@ -68,7 +68,7 @@
         $scope.user.init();
     }
 
-    function newUserController($rootScope, $scope, userAPIservice, notify) {
+    function newUserController($rootScope, $scope, userAPIservice, mynotify) {
         $rootScope.trace = [
             {url: '#/admin/users',
              name: '用户管理'},
@@ -86,19 +86,19 @@
             },
             add: function(valid) {
                 if (!valid) {
-                    notify.error('信息填写有误');
+                    mynotify.error('信息填写有误');
                     return;
                 }
                 var user_data = $scope.user.current_user;
                 if (user_data.password != user_data.repass) {
-                    notify.error('两次密码不一致');
+                    mynotify.error('两次密码不一致');
                     return;
                 }
                 var selected_role_ids = _.map(_.filter($scope.user.role_list, function(role) {
                     return role.selected;
                 }), 'id');
                 if (selected_role_ids.length == 0) {
-                    notify.error('请选择角色');
+                    mynotify.error('请选择角色');
                     return;
                 }
                 user_data.role_ids = selected_role_ids;
@@ -111,7 +111,7 @@
         $scope.user.init();
     }
 
-    function editUserController($rootScope, $scope, $stateParams, userAPIservice, notify) {
+    function editUserController($rootScope, $scope, $stateParams, userAPIservice, mynotify) {
         $rootScope.trace = [
             {url: '#/admin/users',
              name: '用户管理'},
@@ -131,14 +131,14 @@
             update: function() {
                 var user_data = $scope.user.current_user;
                 if (user_data.password != user_data.repass) {
-                    notify.error('两次密码不一致');
+                    mynotify.error('两次密码不一致');
                     return;
                 }
                 var selected_role_ids = _.map(_.filter($scope.user.role_list, function(role) {
                     return role.selected;
                 }), 'id');
                 if (selected_role_ids.length == 0) {
-                    notify.error('请选择角色');
+                    mynotify.error('请选择角色');
                     return;
                 }
                 user_data.role_ids = selected_role_ids;

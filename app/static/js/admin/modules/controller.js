@@ -5,9 +5,9 @@
         .module('myApp')
         .controller('ModuleController', moduleController);
 
-    moduleController.$inject = ['$scope', '$rootScope', 'moduleAPIservice', 'notify'];
+    moduleController.$inject = ['$scope', '$rootScope', 'moduleAPIservice', 'mynotify'];
 
-    function moduleController($scope, $rootScope, moduleAPIservice, notify){
+    function moduleController($scope, $rootScope, moduleAPIservice, mynotify){
         $rootScope.trace = [
             {url: '#/admin/modules',
              name: '模块管理'}
@@ -22,14 +22,14 @@
         };
         $scope.loadModule = function() {
             moduleAPIservice.loadModule().then(function(resp) {
-                notify.success('载入成功');
+                mynotify.success('载入成功');
                 $scope.getModules();
             })
         };
         $scope.current_module = {pid: "0"};
         $scope.newModule = function() {
             moduleAPIservice.newModule($scope.current_module).then(function(resp) {
-                notify.success(resp.data.msg);
+                mynotify.success(resp.data.msg);
                 $scope.getModules();
             })
         };

@@ -6,7 +6,8 @@
         'angularjs-dropdown-multiselect',
         'ngMessages',
         'angular-loading-bar',
-        'ui.router']);
+        'ui.router',
+        'cgNotify']);
 
 
     var csrftoken = $('meta[name=csrf-token]').attr('content');
@@ -17,7 +18,7 @@
         .run(runApp);
 
     httpSetting.$inject = ['$httpProvider'];
-    runApp.$inject = ['$rootScope'];
+    runApp.$inject = ['$rootScope', 'mynotify'];
 
     function httpSetting($httpProvider) {
         $httpProvider.defaults.headers.common['Accept'] = 'application/json';
@@ -25,8 +26,10 @@
         $httpProvider.interceptors.push('errorResponse');
     }
 
-    function runApp($rootScope) {
-        $rootScope.alerts = [];
+    function runApp($rootScope, mynotify) {
+        $rootScope.$on('httpErrorEvent', function(event, msg) {
+            mynotify.error(msg);
+        })
     }
 
 })();

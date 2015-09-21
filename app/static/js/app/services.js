@@ -2,28 +2,36 @@
     'use strict';
     angular
         .module('myApp')
-        .factory('notify', notify)
+        .factory('mynotify', mynotify)
         .factory('errorResponse', errorResponse);
 
-    notify.$inject = ['$rootScope'];
-    errorResponse.$inject = ['$q', 'notify'];
+    mynotify.$inject = ['notify'];
+    errorResponse.$inject = ['$q', '$rootScope'];
 
-    function notify($rootScope) {
+    function mynotify(notify) {
+        var config = {
+            position: 'right',
+            duration: 1500
+        }
         return {
             success: function(msg) {
-                $rootScope.alerts.push({type: 'success', msg: msg});
+                config.message = msg;
+                config.classes = 'alert-success';
+                notify(config);
             },
             error: function(msg) {
-                $rootScope.alerts.push({type: 'danger', msg: msg});
+                config.message = msg;
+                config.classes = 'alert-danger';
+                notify(config);
             }
         }
     }
 
-    function errorResponse($q, notify) {
+    function errorResponse($q, $rootScope) {
         return {
             responseError: function(rejection) {
                 if (rejection.data.message) {
-                    notify.error(rejection.data.message);
+                    $rootScope.$broadcast('httpErrorEvent', rejection.data.message);
                 }
                 return $q.reject(rejection);
             }

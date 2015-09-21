@@ -6,7 +6,8 @@
         'angularjs-dropdown-multiselect',
         'ngMessages',
         'angular-loading-bar',
-        'ui.router']);
+        'ui.router',
+        'cgNotify']);
 
 
     var csrftoken = $('meta[name=csrf-token]').attr('content');
@@ -17,7 +18,7 @@
         .run(runApp);
 
     httpSetting.$inject = ['$httpProvider'];
-    runApp.$inject = ['$rootScope'];
+    runApp.$inject = ['$rootScope', 'mynotify'];
 
     function httpSetting($httpProvider) {
         $httpProvider.defaults.headers.common['Accept'] = 'application/json';
@@ -25,8 +26,10 @@
         $httpProvider.interceptors.push('errorResponse');
     }
 
-    function runApp($rootScope) {
-        $rootScope.alerts = [];
+    function runApp($rootScope, mynotify) {
+        $rootScope.$on('httpErrorEvent', function(event, msg) {
+            mynotify.error(msg);
+        })
     }
 
 })();(function() {
@@ -161,28 +164,36 @@
     'use strict';
     angular
         .module('myApp')
-        .factory('notify', notify)
+        .factory('mynotify', mynotify)
         .factory('errorResponse', errorResponse);
 
-    notify.$inject = ['$rootScope'];
-    errorResponse.$inject = ['$q', 'notify'];
+    mynotify.$inject = ['notify'];
+    errorResponse.$inject = ['$q', '$rootScope'];
 
-    function notify($rootScope) {
+    function mynotify(notify) {
+        var config = {
+            position: 'right',
+            duration: 1500
+        }
         return {
             success: function(msg) {
-                $rootScope.alerts.push({type: 'success', msg: msg});
+                config.message = msg;
+                config.classes = 'alert-success';
+                notify(config);
             },
             error: function(msg) {
-                $rootScope.alerts.push({type: 'danger', msg: msg});
+                config.message = msg;
+                config.classes = 'alert-danger';
+                notify(config);
             }
         }
     }
 
-    function errorResponse($q, notify) {
+    function errorResponse($q, $rootScope) {
         return {
             responseError: function(rejection) {
                 if (rejection.data.message) {
-                    notify.error(rejection.data.message);
+                    $rootScope.$broadcast('httpErrorEvent', rejection.data.message);
                 }
                 return $q.reject(rejection);
             }
@@ -195,9 +206,9 @@
         .module('myApp')
         .controller('ModuleController', moduleController);
 
-    moduleController.$inject = ['$scope', '$rootScope', 'moduleAPIservice', 'notify'];
+    moduleController.$inject = ['$scope', '$rootScope', 'moduleAPIservice', 'mynotify'];
 
-    function moduleController($scope, $rootScope, moduleAPIservice, notify){
+    function moduleController($scope, $rootScope, moduleAPIservice, mynotify){
         $rootScope.trace = [
             {url: '#/admin/modules',
              name: '模块管理'}
@@ -212,14 +223,14 @@
         };
         $scope.loadModule = function() {
             moduleAPIservice.loadModule().then(function(resp) {
-                notify.success('载入成功');
+                mynotify.success('载入成功');
                 $scope.getModules();
             })
         };
         $scope.current_module = {pid: "0"};
         $scope.newModule = function() {
             moduleAPIservice.newModule($scope.current_module).then(function(resp) {
-                notify.success(resp.data.msg);
+                mynotify.success(resp.data.msg);
                 $scope.getModules();
             })
         };
@@ -268,9 +279,9 @@
         .module('myApp')
         .controller('RoleController', roleController);
 
-    roleController.$inject = ['$rootScope', '$scope', 'roleAPIservice', 'notify'];
+    roleController.$inject = ['$rootScope', '$scope', 'roleAPIservice', 'mynotify'];
 
-    function roleController($rootScope, $scope, roleAPIservice, notify) {
+    function roleController($rootScope, $scope, roleAPIservice, mynotify) {
         $rootScope.trace = [
             {url: '#/admin/roles',
              name: '角色管理'}
@@ -308,7 +319,7 @@
         };
         $scope.updateRole = function() {
             roleAPIservice.updateRole($scope.current_role).then(function(resp) {
-                notify.success(resp.data.msg);
+                mynotify.success(resp.data.msg);
                 $scope.getRoles();
             })
         };
@@ -357,11 +368,11 @@
         .controller('NewUserController', newUserController)
         .controller('EditUserController', editUserController);
 
-    userController.$inject = ['$rootScope', '$scope', 'userAPIservice', 'notify'];
-    newUserController.$inject = ['$rootScope', '$scope', 'userAPIservice', 'notify'];
-    editUserController.$inject = ['$rootScope', '$scope', '$stateParams', 'userAPIservice', 'notify'];
+    userController.$inject = ['$rootScope', '$scope', 'userAPIservice', 'mynotify'];
+    newUserController.$inject = ['$rootScope', '$scope', 'userAPIservice', 'mynotify'];
+    editUserController.$inject = ['$rootScope', '$scope', '$stateParams', 'userAPIservice', 'mynotify'];
 
-    function userController($rootScope, $scope, userAPIservice, notify) {
+    function userController($rootScope, $scope, userAPIservice, mynotify) {
         $rootScope.trace = [
             {url: '#/admin/users',
              name: '用户管理'}
@@ -418,7 +429,7 @@
         $scope.user.init();
     }
 
-    function newUserController($rootScope, $scope, userAPIservice, notify) {
+    function newUserController($rootScope, $scope, userAPIservice, mynotify) {
         $rootScope.trace = [
             {url: '#/admin/users',
              name: '用户管理'},
@@ -436,19 +447,19 @@
             },
             add: function(valid) {
                 if (!valid) {
-                    notify.error('信息填写有误');
+                    mynotify.error('信息填写有误');
                     return;
                 }
                 var user_data = $scope.user.current_user;
                 if (user_data.password != user_data.repass) {
-                    notify.error('两次密码不一致');
+                    mynotify.error('两次密码不一致');
                     return;
                 }
                 var selected_role_ids = _.map(_.filter($scope.user.role_list, function(role) {
                     return role.selected;
                 }), 'id');
                 if (selected_role_ids.length == 0) {
-                    notify.error('请选择角色');
+                    mynotify.error('请选择角色');
                     return;
                 }
                 user_data.role_ids = selected_role_ids;
@@ -461,7 +472,7 @@
         $scope.user.init();
     }
 
-    function editUserController($rootScope, $scope, $stateParams, userAPIservice, notify) {
+    function editUserController($rootScope, $scope, $stateParams, userAPIservice, mynotify) {
         $rootScope.trace = [
             {url: '#/admin/users',
              name: '用户管理'},
@@ -481,14 +492,14 @@
             update: function() {
                 var user_data = $scope.user.current_user;
                 if (user_data.password != user_data.repass) {
-                    notify.error('两次密码不一致');
+                    mynotify.error('两次密码不一致');
                     return;
                 }
                 var selected_role_ids = _.map(_.filter($scope.user.role_list, function(role) {
                     return role.selected;
                 }), 'id');
                 if (selected_role_ids.length == 0) {
-                    notify.error('请选择角色');
+                    mynotify.error('请选择角色');
                     return;
                 }
                 user_data.role_ids = selected_role_ids;
@@ -507,9 +518,9 @@
         .module('myApp')
         .service('userAPIservice', userAPIservice);
 
-    userAPIservice.$inject = ['$http', 'notify'];
+    userAPIservice.$inject = ['$http', 'mynotify'];
 
-    function userAPIservice($http, notify) {
+    function userAPIservice($http, mynotify) {
 
         this.getMenu = function() {
             return $http.get('/admin/menus/');
@@ -528,12 +539,12 @@
         };
         this.newUser = function (data) {
             $http.post('/admin/users/new/', data).then(function(resp) {
-                notify.success('新增成功');
+                mynotify.success('新增成功');
             })
         };
         this.updateUser = function(data, id) {
             $http.post('/admin/users/update/'+id+'/', data).then(function(resp) {
-                notify.success('更新成功');
+                mynotify.success('更新成功');
             })
         };
         this.deleteToggleUser = function(id) {

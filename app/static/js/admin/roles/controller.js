@@ -5,9 +5,9 @@
         .module('myApp')
         .controller('RoleController', roleController);
 
-    roleController.$inject = ['$rootScope', '$scope', 'roleAPIservice', 'notify'];
+    roleController.$inject = ['$rootScope', '$scope', 'roleAPIservice', 'mynotify'];
 
-    function roleController($rootScope, $scope, roleAPIservice, notify) {
+    function roleController($rootScope, $scope, roleAPIservice, mynotify) {
         $rootScope.trace = [
             {url: '#/admin/roles',
              name: '角色管理'}
@@ -45,7 +45,7 @@
         };
         $scope.updateRole = function() {
             roleAPIservice.updateRole($scope.current_role).then(function(resp) {
-                notify.success(resp.data.msg);
+                mynotify.success(resp.data.msg);
                 $scope.getRoles();
             })
         };
